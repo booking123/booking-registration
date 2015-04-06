@@ -1,0 +1,2083 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="myapp">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>BookingPal</title>
+
+	<link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'/>
+	<link rel="stylesheet" type="text/css" href="css/styleRegistration.css"/>
+
+	<script src="js/config.js" type="text/javascript"></script>
+
+	<script src="js/angular.min.js" type="text/javascript"></script>
+	<script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+	<script src="js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+
+	<script src="js/registration_functions_angularjs.js" type="text/javascript"></script>
+</head>
+
+<body ng-controller="RegistrationController">
+
+<div class="wrapper">
+	<div class="header">
+		<div class="header_main_content">
+			<a href="#" ng-click="logout()"><img src="img/logo.png" class="logo_img"/></a>
+
+			<div class="title_box">
+				<div class="header_separator_line"></div>
+				<div class="title_div">{{Global.title}}</div>
+				<div class="header_separator_line"></div>
+			</div>
+
+			<div id="selectorL18n" class="l18n" click-only-here="Global.l18n.view">
+				<a class="l18n_view" ng-click="Global.l18n.toggle(!Global.l18n.view)" href="#">{{Global.l18n.activeName()}}
+					<i class="arrow_down"></i></a>
+				<ul ng-show="Global.l18n.view" class="l18n_list">
+					<li ng-repeat="(key, language) in Global.l18n.languages"
+					    ng-class="{active: Global.l18n.isActive(key)}"
+					    ng-click="Global.l18n.select(key)"><a href="#">{{language}}</a></li>
+				</ul>
+			</div>
+
+			<div class="clearer"></div>
+		</div>
+	</div>
+</div>
+
+<div class="content_separator_line"></div>
+
+<!-- LOGIN-->
+<div id="loginPage" class="ng-hide" ng-show="showPage==100">
+	<div class="wrapper">
+		<div class="content_wrapper">
+			<div class="content">
+
+				<div class="messenger">
+					<span ng-show="pageLogin.login.message"><img src="img/validation_error_sign.png"/>&nbsp;
+					{{pageLogin.login.message}}</span>
+				</div>
+
+				<form ng-submit="pageLogin.login.submit()" id="login_form" class="form_grey">
+					<a ng-click="pageLogin.showRegistration()" class="create_new_account" href="#">
+						<span>+</span>
+						Create New Account
+					</a>
+
+					<div class="form_wrapper">
+						<h2 class="title">Account Login</h2>
+
+						<div class="login_form_content">
+							<dl>
+								<dt><label for="login_email">Email:</label></dt>
+								<dd>
+									<input ng-model="pageLogin.login.email" id="login_email" type="text"
+									       name="j_username"
+									       class="text_input large"/>
+								</dd>
+							</dl>
+
+							<dl class="padding_bottom_10">
+								<dt><label for="login_psw">Password:</label></dt>
+								<dd>
+									<input ng-model="pageLogin.login.password" id="login_psw" type="password"
+									       name="j_password"
+									       class="text_input medium"/>
+
+									<div class="floater_right">
+										<button class="button green cursor_pointer" type="submit">Login</button>
+									</div>
+								</dd>
+							</dl>
+							<p class="align_right">
+								<a ng-click="pageLogin.forgotPassword.toggle(true)" href="#">Forgot Your Password?</a>
+							</p>
+						</div>
+					</div>
+
+				</form>
+
+
+				<div class="form_grey_popup forgot_password">
+					<form ng-submit="pageLogin.forgotPassword.submit()"
+					      ng-show="pageLogin.forgotPassword.view"
+					      id="forgot_password_form"
+					      class="form_grey">
+
+						<a ng-click="pageLogin.forgotPassword.toggle(false)" class="close_button" href="#">
+							Close &nbsp;
+							<span>X</span>
+						</a>
+
+						<div class="form_wrapper">
+							<h2>Forgot Your Password?</h2>
+
+							<h3>Enter your email address and we will send you a temporary<br/>
+								password to access your account.</h3>
+
+							<p>
+								<input class="text_input xxlarge margin_right_20 text_align_center" type="text"
+								       name="email" value="" placeholder="Enter Email Address"/>
+								<button class="button green" type="submit">Submit</button>
+							</p>
+						</div>
+
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="content_separator_line"></div>
+
+<!-- HOME-->
+<div id="indexPage" class="ng-hide" ng-show="showPage==0">
+
+	<div class="wrapper">
+		<div class="content_wrapper">
+			<div class="content">
+				<div class="home_page_content_header">
+					<div class="home_page_main_text">
+						Easily distribute your properties through BookingPal leading channel partners
+						to access millions of vacationers searching for and booking vacation rentals online.
+					</div>
+					<div class="home_page_video_div">
+						<img src="img/video_img.jpg" class="video_img"/>
+
+						<div class="text_below_video">Testimonial</div>
+					</div>
+					<div class="clearer"></div>
+				</div>
+
+				<div class="home_page_boxes">
+					<div class="text_box_div floater_left text_box_right_space">
+						<div class="text_box_header_wrapper">
+							<div class="text_box_header_text">Select Your Own Channel</div>
+						</div>
+						<div class="text_box_content_wrapper">
+							<div class="text_box_content_text">You have the flexibility to choose which Channel Partners
+								you want to work with and the specific properties you want the Channel Partners to
+								distribute. You can choose Global, National, regional and Specilaty Channel partners.
+							</div>
+							<div class="text_box_img_wrapper"><img src="img/home_textbox_table_img.png"
+							                                       class="home_textbox_table_img"/></div>
+						</div>
+					</div>
+
+					<div class="text_box_div floater_left">
+						<div class="text_box_header_wrapper">
+							<div class="text_box_header_text">Reach More Guests</div>
+						</div>
+						<div class="text_box_content_wrapper">
+							<div class="text_box_content_text">Let the Channel Partners help you with marketing by
+								bringing more vacationers in front of your properties to rent your homes. Gain a new
+								audience you might not normally capture.
+							</div>
+							<div class="text_box_img_wrapper"><img src="img/home_textbox_people_network.png"
+							                                       class="home_textbox_people_network"/></div>
+						</div>
+					</div>
+
+					<div class="text_box_div floater_right">
+						<div class="text_box_header_wrapper">
+							<div class="text_box_header_text">Save Time</div>
+						</div>
+						<div class="text_box_content_wrapper">
+							<div class="text_box_content_text">You will no longer have to manually enter, continuously
+								manage, and keep up-to-date data and images on Channel Partner sites.  All bookings on
+								Channel Partner sites are completely connected with your reservation software and your
+								website so double bookings never occur.
+							</div>
+							<div class="text_box_img_wrapper"><img src="img/home_textbox_people_sand_clock.png"
+							                                       class="home_textbox_people_sand_clock"/></div>
+						</div>
+					</div>
+
+					<div class="clearer"></div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="content_separator_line"></div>
+
+		<div class="footer_buttons_wrapper">
+			<div class="home_button_div" ng-click="pageStep0.next()"></div>
+		</div>
+	</div>
+</div>
+
+<!-- STEP 1-->
+<div id="step1Page" class="ng-hide" ng-show="showPage==1">
+
+<form name="reg1Form" class="registration_step_form registration_checkbox_highlight_form" novalidate>
+<div class="menu_progres_bar_horizontal_div">
+	<div class="menu_progres_bar_wrapper">
+		<div class="menu_div">
+			<div class="menu_item menu_item_current menu_item_line_space">1</div>
+			<div class="menu_item menu_item_future menu_item_line_space">2</div>
+			<div class="menu_item menu_item_future menu_item_line_space">3</div>
+			<div class="menu_item menu_item_future menu_item_line_space">4</div>
+			<div class="menu_item menu_item_future menu_item_line_space">5</div>
+			<div class="menu_item menu_item_future menu_item_line_space">6</div>
+			<div class="menu_item menu_item_future">7</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrapper">
+<div class="content_wrapper">
+<div class="content contentTextBlue">
+<div class="step1_content_upper_space_with_edit">
+	<div ng-show="pageStep1.isError || pageStep1.errorStep()" class="step1_validaton_error_message">
+		<div class="step1_validaton_error_message_wrapper">
+			<img src="img/validation_error_sign.png" alt="error"> {{pageStep1.message}}
+		</div>
+	</div>
+	<div class="clearer"></div>
+</div>
+
+<div class="step1_main_content_columns">
+<div class="column_fields">
+	<div class="field_row"
+	     ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.pmsAccountId.$invalid]">
+		<div class="field_label">
+			Your PMS Account ID:
+			<span ng-show="submittedStep1 && reg1Form.pmsAccountId.$error.required"
+			      class="error_validation_sign">*</span>
+		</div>
+		<div class="field_div">
+			<input required ng-model="user.account" name="pmsAccountId" id="pmsAccountId" type="text" maxlength="32"
+			       class="input_text_field_general"/>
+			<a class="button_wtf" href="#" ng-click="wtf_AccountID=!wtf_AccountID"></a>
+
+			<div class="description_wtf" ng-show="!!wtf_AccountID">
+				<p><strong>Your PMS account ID</strong></p>
+
+				<p>Fugitat accab im quis debistibus demporectet ligendi odi beatem inum apiet prerum voluptae int
+					plitius experuntur aut et opta quiatursapelig nimposam re et rescius. quiatur sapelig nimposam re et
+					rescius. Et od quia doloritatia.</p>
+			</div>
+		</div>
+
+		<div class="clearer"></div>
+	</div>
+
+	<div class="field_row"
+	     ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.companyName.$invalid]">
+		<div class="field_label">
+			Company Name: <span ng-show="submittedStep1 && reg1Form.companyName.$error.required"
+			                    class="error_validation_sign">*</span>
+		</div>
+		<div class="field_div">
+			<input required ng-model="user.company" name="companyName" id="companyName" type="text"  maxlength="50"
+			       class="input_text_field_general"/>
+		</div>
+		<div class="clearer"></div>
+	</div>
+
+	<div class="field_row"
+	     ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.firstName.$invalid]">
+		<div class="field_label">
+			First Name: <span ng-show="submittedStep1 && reg1Form.firstName.$error.required"
+			                  class="error_validation_sign">*</span>
+		</div>
+		<div class="field_div">
+			<input required ng-model="user.firstname" name="firstName" id="firstName" type="text"  maxlength="24"
+			       class="input_text_field_general"/>
+		</div>
+		<div class="clearer"></div>
+	</div>
+
+	<div class="field_row"
+	     ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.lastName.$invalid]">
+		<div class="field_label">
+			Last Name: <span ng-show="submittedStep1 && reg1Form.lastName.$error.required"
+			                 class="error_validation_sign">*</span>
+		</div>
+		<div class="field_div">
+			<input required ng-model="user.lastname" name="lastName" id="lastName" type="text"  maxlength="24"
+			       class="input_text_field_general"/>
+		</div>
+		<div class="clearer"></div>
+	</div>
+
+	<div class="field_row"
+	     ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.country.$invalid]">
+		<div class="field_label">
+			Country:
+									<span ng-show="submittedStep1 && reg1Form.country.$error.required"
+									      class="error_validation_sign">*</span>
+		</div>
+		<div class="field_div">
+			<select required ng-model="currentCountry"
+			        ng-options="countryid.Name for countryid in countriesStep1"
+			        ng-change="changeCountry()"
+			        name="country" id="country" type="text" class="select_field_general">
+				<option value="">Select One</option>
+			</select>
+			<!-- type.ID as type.Name for type in pageStep4.currency.list -->
+		</div>
+		<div class="clearer"></div>
+	</div>
+
+	<div class="field_row"
+	     ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.address.$invalid]">
+		<div class="field_label">
+			Address: <span ng-show="submittedStep1 && reg1Form.address.$error.required"
+			               class="error_validation_sign">*</span>
+		</div>
+		<div class="field_div">
+			<input required ng-model="user.address" name="address" id="address" type="text"  maxlength="50"
+			       class="input_text_field_general"/>
+		</div>
+		<div class="clearer"></div>
+	</div>
+
+	<div class="field_row" ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.city.$invalid]">
+		<div class="field_label">
+			City: <span ng-show="submittedStep1 && reg1Form.city.$error.required"
+			            class="error_validation_sign">*</span>
+		</div>
+		<div class="field_div">
+			<input required ng-model="user.city" name="city" id="city" type="text" maxlength="20"
+			       class="input_text_field_general"/>
+		</div>
+		<div class="clearer"></div>
+	</div>
+
+	<div ng-show="user.countryid=='US'" class="field_row"
+	     ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.state.$invalid]">
+		<div class="field_label">
+			State:
+									<span ng-show="submittedStep1 && reg1Form.state.$error.required"
+									      class="error_validation_sign">*</span>
+		</div>
+		<div class="field_div">
+			<select ng-required="user.countryid=='US'" ng-model="user.state"
+			        ng-options="state.name as state.name for state in statesStep1" name="state" id="state"
+			        type="text" class="select_field_general">
+				<option value="">Select One</option>
+			</select>
+		</div>
+		<div class="clearer"></div>
+	</div>
+
+	<div class="field_row" ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.zip.$invalid]">
+		<div class="field_label">
+			ZIP/Potal Code:
+									<span ng-show="submittedStep1 && reg1Form.zip.$error.required"
+									      class="error_validation_sign">*</span>
+		</div>
+		<div class="field_div">
+			<input required ng-model="user.code" name="zip" id="zip" type="text" maxlength="10"
+			       class="input_text_field_general"/>
+		</div>
+		<div class="clearer"></div>
+	</div>
+
+	<div class="field_row"
+	     ng-class="{true: 'error_validation'}[submittedStep1 && (reg1Form.telCountryCode.$invalid || reg1Form.telMainPart.$invalid)]">
+		<div class="field_label">
+			Tel:<span
+				ng-show="submittedStep1 && (reg1Form.telCountryCode.$error.required || reg1Form.telMainPart.$error.required)"
+				class="error_validation_sign">*</span>
+		</div>
+		<div class="field_div">
+			<input required ng-maxlength="5" maxlength="5" ng-model="user.phoneCountryCode" type="text"
+			       name="telCountryCode" id="telCountryCode"
+			       class="input_text_field_custom_width telCountryCode_text_field"/>
+			<input required ng-maxlength="20" maxlength="20" ng-model="user.phoneMainPart" type="text"
+			       name="telMainPart"
+			       id="telMainPart" class="input_text_field_custom_width telMainPart_text_field"/>
+		</div>
+		<div class="clearer"></div>
+	</div>
+
+	<div class="field_row" ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.email.$invalid]">
+		<div class="field_label">
+			Email:
+			<span ng-show="submittedStep1 && reg1Form.email.$error.required"
+			      class="error_validation_sign">*</span>
+		</div>
+		<div class="field_div">
+			<input required ng-model="user.email" name="email" id="email" type="email" maxlength="100"
+			       class="input_text_field_general"/>
+		</div>
+		<div class="clearer"></div>
+	</div>
+
+</div>
+<style type="text/css">
+	.password_row.error{
+
+	}
+	.password_row .error_validation_sign{
+		display: none;
+	}
+	.password_row.error .error_validation_sign{
+		display: inline-block;
+	}
+
+	.password_row.error input.input_text_field_general{
+		border: 2px solid #FF0000;
+	}
+</style>
+<div class="column_password_checkboxes">
+	<div class="password_box">
+		<div class="password_box_wrapper">
+			<div class="password_box_title">Please Create a Password</div>
+			<div class="password_fields">
+				<div class="password_row" ng-class="{true: 'error'}[Global.verifyingPassword()]">
+					<div class="field_label">
+						Type Password:
+						<span class="error_validation_sign">*</span>
+					</div>
+					<div class="field_div">
+			            <input type="password" class="input_text_field_general" autocomplete="off" ng-model="user.password" ng-required="Global.isPasswordRequired() || pageStep1.rePasswordField"/>
+					</div>
+					<div class="clearer"></div>
+				</div>
+				<div class="password_row" ng-class="{true: 'error'}[Global.verifyingPassword()]">
+					<div class="field_label">
+						Verify Password:
+						<span class="error_validation_sign">*</span>
+					</div>
+					<div class="field_div">
+						<input type="password" class="input_text_field_general" autocomplete="off" ng-model="pageStep1.rePasswordField" ng-required="Global.isPasswordRequired() || user.password"/>
+					</div>
+					<div class="clearer"></div>
+				</div>
+
+
+				<!--<div class="password_row" ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.password.$invalid]">
+					<div class="field_label">
+						Type Password:
+						<span class="error_validation_sign" ng-show="!Global.isPasswordRequired() && pageStep1.message && reg1Form.password.$invalid">*</span>
+					</div>
+					<div class="field_div">
+						<span ng-if="!Global.isPasswordRequired()">
+			                <input name="password" type="password" class="input_text_field_general" autocomplete="off" ng-model="user.password" required="required"/>
+						</span>
+						<span ng-if="Global.isPasswordRequired()">
+							<input name="password" type="password" class="input_text_field_general" autocomplete="off"  ng-model="user.password" />
+						</span>
+					</div>
+					<div class="clearer"></div>
+				</div>
+
+				<div class="password_row" ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.passwordVerify.$invalid]">
+					<div class="field_label">
+						Verify Password:
+						<span ng-show="!Global.isPasswordRequired() && pageStep1.message && reg1Form.passwordVerify.$invalid" class="error_validation_sign">*</span>
+					</div>
+					<div class="field_div">
+						<span ng-if="!Global.isPasswordRequired()">
+							<input name="passwordVerify" id="passwordVerify" type="password" class="input_text_field_general" autocomplete="off" ng-model="user.passwordVerify" valid-password-re required="required" />
+						</span>
+						<span ng-if="Global.isPasswordRequired()">
+							<input name="passwordVerify" id="passwordVerify" type="password" class="input_text_field_general" autocomplete="off" ng-model="user.passwordVerify" valid-password-re />
+						</span>
+					</div>
+					<div class="clearer"></div>
+				</div>-->
+			</div>
+		</div>
+	</div>
+
+	<div class="checkboxes_div">
+		<div class="checkboxes_div_title">Certification of Authority</div>
+		<div class="checkbox_row"
+		     ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.authorityCheckbox.$invalid]">
+			<input required ng-model="user.authorityCheckbox" type="checkbox" id="authorityCheckbox"
+			       name="authorityCheckbox" class="checkbox_field"/>
+
+			<div class="checkbox_text"><strong>By checking this box</strong> I acknowledge, represent and
+				warrant that I have the authority to act on behalf of the company (if a company) and the
+				property owner entering into the BookingPal Distribution agreement and I acknowledge,
+				represent and warrant that all information is true, complete and accurate.
+			</div>
+			<div class="clearer"></div>
+		</div>
+
+		<div class="checkbox_row"
+		     ng-class="{true: 'error_validation'}[submittedStep1 && reg1Form.privacyPolicyAgreeCheckbox.$invalid]">
+			<input required ng-model="user.privacyPolicyAgreeCheckbox" type="checkbox"
+			       id="privacyPolicyAgreeCheckbox" name="privacyPolicyAgreeCheckbox"
+			       class="checkbox_field"/>
+
+			<div class="checkbox_text">
+				<strong>By checking this box</strong>, I confirm that have read,
+				understand and agree to the BookingPal
+				<span class="bookingpal_privacy_policy" ng-click="pageStep1.viewPrivacy()">Privacy Policy</span>.
+			</div>
+			<div class="clearer"></div>
+		</div>
+	</div>
+</div>
+<div class="clearer"></div>
+</div>
+
+
+</div>
+</div>
+
+<div class="content_separator_line"></div>
+
+<div class="footer_buttons_wrapper">
+	<div class="next_button_div" ng-click="pageStep1.next()"></div>
+	<div class="clearer"></div>
+</div>
+
+</div>
+</form>
+
+</div>
+<!-- STEP1 POPUP PRIVACY POLICY -->
+<div class="popup_window_privacy ng-hide" ng-show="showStep1PrivacyPopup">
+	<div class="popup_window_privacy_back"></div>
+
+	<div class="popup_window_privacy_wrapper">
+		<div class="popup_heading_with_close_div">
+			<div class="popup_privacy_close_div">
+				<div class="popup_privacy_close_btn" ng-click="showStep1PrivacyPopup=false"></div>
+				<div class="clearer"></div>
+			</div>
+			<div class="popup_privacy_heading_div">
+				<img src="img/logo.png" class="logo_center_img"/>
+			</div>
+		</div>
+		<div class="popup_privacy_content_wrapper contentTextBlue">
+			<div class="popup_content_div" id="step1PopupPrivacyContentDiv">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="popup_window_privacy ng-hide" ng-show="showStep1TermConditions">
+	<div class="popup_window_privacy_back"></div>
+
+	<div class="popup_window_privacy_wrapper">
+		<div class="popup_heading_with_close_div">
+			<div class="popup_privacy_close_div">
+				<div class="popup_privacy_close_btn" ng-click="showStep1TermConditions=false"></div>
+				<div class="clearer"></div>
+			</div>
+			<div class="popup_privacy_heading_div">
+				<img src="img/logo.png" class="logo_center_img"/>
+			</div>
+		</div>
+		<div class="popup_privacy_content_wrapper contentTextBlue">
+			<div class="popup_content_div" id="step1TermConditionsContentDiv">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- STEP 2 -->
+<div id="step2Page" class="ng-hide" ng-show="showPage==2">
+
+<div class="menu_progres_bar_horizontal_div">
+	<div class="menu_progres_bar_wrapper">
+		<div class="menu_div">
+			<div class="menu_item menu_item_passed menu_item_line_space">1</div>
+			<div class="menu_item menu_item_current menu_item_line_space">2</div>
+			<div class="menu_item menu_item_future menu_item_line_space">3</div>
+			<div class="menu_item menu_item_future menu_item_line_space">4</div>
+			<div class="menu_item menu_item_future menu_item_line_space">5</div>
+			<div class="menu_item menu_item_future menu_item_line_space">6</div>
+			<div class="menu_item menu_item_future">7</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrapper">
+<div class="step2_content_wrapper">
+<div class="content contentTextBlue">
+
+<div class="step2_slider_div">
+	<div class="slider_title_div">
+		<div class="slider_title_text">Select Commission You Want to Offer the Channel Partners</div>
+	</div>
+
+	<div class="slider_content_div">
+		<div class="slider_wrapper">
+			<div class="slider_reference_value_div">
+				<div class="slider_min_value">{{pageStep2.slider.option.min}}%</div>
+				<div class="slider_max_value">{{pageStep2.slider.option.max}}%</div>
+				<div class="clearer"></div>
+			</div>
+			<div class="slider_div">
+				<div id="sliderStep2"></div>
+			</div>
+
+		</div>
+		<div class="slider_info_wrapper">
+			<div class="slider_info_div">
+				<div class="slider_info_text">
+					<div class="slider_info_text_row">Number of Partners: <span
+							class="slider_info_text_highlighted">{{pageStep2.slider.option.count_view_partners}}</span></div>
+					<div class="slider_info_text_row">Total Exposures: <span
+							class="slider_info_text_highlighted">{{pageStep2.slider.option.total_view_exposures | number:0}}</span>
+						visitors per month
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="clearer"></div>
+	</div>
+</div>
+
+
+<div class="step2_select_all_div step_select_all_div">
+	<div class="select_all_checkbox_div"><input checkbox-all="listStep2.selected" type="checkbox"
+	                                            id="step2SelectAllCommision" name="step2SelectAllCommision"
+	                                            class="checkbox_field"/></div>
+	<div class="select_all_text">Select All</div>
+
+	<div ng-show="pageStep2.isError || pageStep2.errorStep()" class="step2_validaton_error_message">
+		<div class="step2_validaton_error_message_wrapper">
+			<img src="img/validation_error_sign.png" alt="error"/> {{pageStep2.message}}
+		</div>
+	</div>
+
+	<div class="clearer"></div>
+</div>
+
+<div class="step2_table_tabs_wrapper">
+	<div class="step2_tabs_wrapper">
+		<!-- ng-click="popupTabView='pay_per_booking'" ng-class="{popup_tab_selected: popupTabView=='pay_per_booking'}" -->
+		<div ng-click="step2TableTabView='pay_per_booking'"
+		     ng-class="{selected_tab: step2TableTabView=='pay_per_booking'}"
+		     class="regular_tab booking_tab">
+			<div class="tab_text_wrapper">Pay-Per-Booking Sites</div>
+		</div>
+		<div ng-click="step2TableTabView='pay_per_listing'"
+		     ng-class="{selected_tab: step2TableTabView=='pay_per_listing'}" class="regular_tab">
+			<div class="tab_text_wrapper">Pay-Per-Listing Sites</div>
+		</div>
+		<div ng-click="step2TableTabView='pay_per_inquiry'"
+		     ng-class="{selected_tab: step2TableTabView=='pay_per_inquiry'}" class="regular_tab">
+			<div class="tab_text_wrapper">Pay-Per-Inquiry Sites</div>
+		</div>
+		<div class="clearer"></div>
+	</div>
+	<div class="tabs_border_bottom"></div>
+</div>
+
+<form name="reg2Form" class="registration_step_form" novalidate>
+	<table ng-show="step2TableTabView=='pay_per_booking'" class="data_table table_data_step2"
+	       id="payPerBookingTabTable">
+		<thead>
+		<tr class="heading_row">
+			<td class="column_with_checkbox" style="width: 190px;">Channel</td>
+			<td style="width: 85px;">Property Coverage</td>
+			<td>Payment Processing</td>
+			<!--<td>Payouts</td>-->
+			<td>Contract Requirement</td>
+			<td>Channel Terms</td>
+			<td>Channel Margin</td>
+			<td class="td_last_column_border" style="width: 70px;">More Info</td>
+		</tr>
+		</thead>
+		<tbody ng-repeat="row in listStep2 | filter:pageStep2.filter.booking">
+		<tr class="data_row">
+			<td class="td_with_checkbox">
+				<input type="checkbox" name="propertyCheckbox" class="checkbox_field step2_table_checkbox_field" ng-model="row.selected"/>
+				<div class="table_logo_img_div"><img class="table_logo_img" ng-src="{{row.logo_url}}" alt="{{row.channel_name}}"/></div>
+				<div class="clearer"></div>
+			</td>
+			<td>{{row.coverage}}</td>
+			<td>{{row.payment_process}}</td>
+			<!--<td class="td_with_lot_text">{{row.payouts}}</td>-->
+			<td>Contract with BookingPal</td>
+			<td class="td_with_lot_text">
+				<a href="{{row.terms_conditions}}" ng-show="{{!!row.terms_conditions}}">Terms and Conditions</a>
+			</td>
+			<td>{{row.commission | number}}%</td>
+			<td class="td_last_column_border">
+				<a href="#" class="info_table_btn_div" ng-click="pageStep2.channelInfo.view(row.id)"></a>
+			</td>
+		</tr>
+		<tr class="bottom_border_row">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<!--<td></td>-->
+			<td class="td_last_column_border"></td>
+		</tr>
+		</tbody>
+	</table>
+
+
+	<table ng-show="step2TableTabView=='pay_per_listing'" class="data_table table_data_step2"
+	       id="payPerListingTabTable">
+		<thead>
+		<tr class="heading_row">
+			<td class="column_with_checkbox" style="width: 190px;">Channel</td>
+			<td style="width: 95px;">Property Coverage</td>
+			<td>Contract Requirement</td>
+			<td style="width: 110px;">Sign up URL</td>
+			<td>Inquiry fee</td>
+			<td style="width: 70px;">More Info</td>
+			<td class="td_last_column_border">Note</td>
+		</tr>
+		</thead>
+		<tbody ng-repeat="row in listStep2 | filter:pageStep2.filter.listing">
+
+		<tr class="data_row">
+			<td class="td_with_checkbox">
+				<input type="checkbox" name="propertyCheckbox" class="checkbox_field step2_table_checkbox_field"
+				       ng-model="row.selected"/>
+
+				<div class="table_logo_img_div">
+					<img class="table_logo_img" ng-src="{{row.logo_url}}" alt="{{row.channel_name}}">
+				</div>
+				<div class="clearer"></div>
+			</td>
+			<td>{{row.coverage}}</td>
+			<td>Contract directly with Channel</td>
+			<td><a href="{{row.website_url}}">{{row.channel_name}}</a></td>
+			<td class="td_with_lot_text">{{row.listing_fees}}</td>
+			<td>
+				<a href="#" class="info_table_btn_div" ng-click="pageStep2.channelInfo.view(row.id)"></a>
+			</td>
+			<td class="td_last_column_border">-</td>
+		</tr>
+		<tr class="bottom_border_row">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td class="td_last_column_border"></td>
+		</tr>
+
+		</tbody>
+	</table>
+
+	<table ng-show="step2TableTabView=='pay_per_inquiry'" class="data_table table_data_step2"
+	       id="payPerInquiryTabTable">
+		<thead>
+		<tr class="heading_row">
+			<td class="column_with_checkbox" style="width: 190px;">Channel</td>
+			<td style="width: 95px;">Property Coverage</td>
+			<td>Contract Requirement</td>
+			<td style="width: 110px;">Sign up URL</td>
+			<td>Inquiry fee</td>
+			<td style="width: 70px;">More Info</td>
+			<td class="td_last_column_border">Note</td>
+		</tr>
+		</thead>
+		<tbody ng-repeat="row in listStep2 | filter:pageStep2.filter.inguiry">
+
+		<tr class="data_row">
+			<td class="td_with_checkbox">
+				<input type="checkbox" name="propertyCheckbox" class="checkbox_field step2_table_checkbox_field"
+				       ng-model="row.selected"/>
+
+				<div class="table_logo_img_div">
+					<img class="table_logo_img" ng-src="{{row.logo_url}}" alt="{{row.channel_name}}">
+				</div>
+				<div class="clearer"></div>
+			</td>
+			<td>{{row.coverage}}</td>
+			<td>Contract directly with Channel</td>
+			<td><a href="{{row.website_url}}">{{row.channel_name}}</a></td>
+			<td class="td_with_lot_text">{{row.listing_fees}}</td>
+			<td>
+				<a href="#" class="info_table_btn_div" ng-click="pageStep2.channelInfo.view(row.id)"></a>
+			</td>
+			<td class="td_last_column_border">-</td>
+		</tr>
+		<tr class="bottom_border_row">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td class="td_last_column_border"></td>
+		</tr>
+		</tbody>
+	</table>
+
+	<div class="step2_confirm_text_wrapper registration_checkbox_highlight_form">
+		<div class="step2_confirm_checkbox_div"
+		     ng-class="{true: 'error_validation'}[submittedStep2 && !reg4Form.step2ConfirmReadDistributionAgreement.$valid]">
+			<input required ng-model="step2.confirmDistributionAgreement" type="checkbox"
+			       id="step2ConfirmReadDistributionAgreement" name="step2ConfirmReadDistributionAgreement"
+			       class="checkbox_field"/>
+		</div>
+		<div class="step2_confirm_text_div"><strong>By checking this box</strong> I confirm that I have
+			read, understand and accept the <span class="step2_privacy_policy_link"
+			                                      ng-click="pageStep2.showPrivacyPopup()">channel partners Distribution Agreement</span>,
+			And I agree to be bound by their terms.
+		</div>
+		<div class="clearer"></div>
+	</div>
+
+</form>
+
+</div>
+</div>
+
+<div class="content_separator_line"></div>
+
+<div class="footer_buttons_wrapper">
+	<div class="next_button_div" ng-click="pageStep2.next(true)"></div>
+	<div class="save_button_div" ng-click="pageStep2.next(false)"></div>
+	<div class="back_button_div" ng-click="pageStep2.back()"></div>
+	<div class="clearer"></div>
+</div>
+</div>
+
+</div>
+<!-- INFO POPUP Step 2-->
+<div class="popup_window_more_info ng-hide" id="popup_window_more_info" ng-show="showInfoPopup">
+	<div class="popup_window_more_info_back"></div>
+
+	<div class="popup_window_more_info_wrapper">
+
+		<div class="popup_close_btn_div">
+			<a href="#" class="popup_close_btn" ng-click="pageStep2.channelInfo.close()"></a>
+
+			<div class="clearer"></div>
+		</div>
+
+		<div class="popup_content_wrapper contentTextBlue">
+
+			<div class="popup_content_div">
+				<div class="popup_heading_wrapper">
+					<div class="popup_tabs_div">
+						<div class="popup_logo_img_div">
+							<!--<img ng-src="{{pageStep2.channelInfo.data.logo_url}}"-->
+							<!--class="popup_logo_img"/>-->
+						</div>
+						<div ng-click="popupTabView='channel_overview'"
+						     ng-class="{popup_tab_selected: popupTabView=='channel_overview'}"
+						     class="popup_tab_div popup_tab_selected popup_tab_channel">
+							<div class="popup_tab_text">Channel Overview</div>
+						</div>
+						<div class="popup_tab_separator_temp"></div>
+						<div class="clearer"></div>
+					</div>
+
+				</div>
+
+				<div class="popup_content_main_wrapper">
+					<div class="popup_content_main" id="popupTabChannel" ng-show="popupTabView=='channel_overview'">
+						<div class="left_column">
+							<div class="pop2up_left_column_text_wrapper">
+
+								<img alt="{{pageStep2.channelInfo.data.channel_name}}" ng-src="{{pageStep2.channelInfo.data.logo_url}}" style="width: 96%; margin: 2%"/>
+
+								<div class="popup_content_column_regular_text">
+									<dl class="popup_content_column_channel_info">
+										<dt>Internal phone number:</dt>
+										<dd>{{pageStep2.channelInfo.data.phone}}</dd>
+									</dl>
+
+									<dl class="popup_content_column_channel_info">
+										<dt>Email address:</dt>
+										<dd>{{pageStep2.channelInfo.data.email}}</dd>
+									</dl>
+
+									<dl ng-show="!!pageStep2.channelInfo.data.office_address"
+									    class="popup_content_column_channel_info">
+										<dt>Office address:</dt>
+										<dd>{{pageStep2.channelInfo.data.office_address}}</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+
+						<div class="right_column">
+							<div class="popup_right_column_text_wrapper">
+								<!--<div class="popup_content_column_title">What is Homes.com?</div>-->
+								<div class="popup_content_column_regular_text channel_desc">
+									{{pageStep2.channelInfo.data.description}}
+								</div>
+								<a href="#" class="popup_select_btn" style="margin-top: 10px"
+								   ng-click="pageStep2.channelInfo.select()">Select Channel</a>
+
+								<div class="clearer"></div>
+							</div>
+						</div>
+
+						<div class="clearer"></div>
+					</div>
+				</div>
+
+				<div class="clearer"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- STEP2 POPUP PRIVACY POLICY -->
+<div class="popup_window_privacy ng-hide" id="popup_window_privacy" ng-show="pageStep2.activePrivacyPopup">
+	<div class="popup_window_privacy_back"></div>
+
+	<div class="popup_window_privacy_wrapper">
+		<div class="popup_heading_with_close_div">
+			<div class="popup_privacy_close_div">
+				<div class="popup_privacy_close_btn" ng-click="pageStep2.activePrivacyPopup = false"></div>
+				<div class="clearer"></div>
+			</div>
+			<div class="popup_privacy_heading_div">
+				<img src="img/logo.png" class="logo_center_img"/>
+			</div>
+		</div>
+		<div class="popup_privacy_content_wrapper contentTextBlue">
+			<div class="popup_content_div" id="step2PopupPrivacyContentDiv">
+				<table class="step2_popup_channel_terms_list_table">
+
+					<tbody>
+					<tr class="step2_popup_channel_table_row"
+					    ng-repeat="oneRowElem in listStep2 | filter: pageStep2.filter.isSelectedChannel">
+						<td>{{oneRowElem.channel_name}}</td>
+						<td><a ng-show="{{!!oneRowElem.terms_conditions}}" target="_blank"
+						       href="{{oneRowElem.terms_conditions}}">Terms and Conditions</a></td>
+						<td><a ng-show="{{!!oneRowElem.privacy_policy}}" target="_blank"
+						       href="{{oneRowElem.privacy_policy}}">Privacy Policy</a></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- STEP 3 -->
+<div id="step3Page" class="ng-hide" ng-show="showPage==3">
+	<div class="menu_progres_bar_horizontal_div">
+		<div class="menu_progres_bar_wrapper">
+			<div class="menu_div">
+				<div class="menu_item menu_item_passed menu_item_line_space">1</div>
+				<div class="menu_item menu_item_passed menu_item_line_space">2</div>
+				<div class="menu_item menu_item_current menu_item_line_space">3</div>
+				<div class="menu_item menu_item_future menu_item_line_space">4</div>
+				<div class="menu_item menu_item_future menu_item_line_space">5</div>
+				<div class="menu_item menu_item_future menu_item_line_space">6</div>
+				<div class="menu_item menu_item_future">7</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="wrapper">
+		<div class="content_wrapper">
+			<div class="content contentTextBlue">
+
+				<div class="content_title_div">
+					<div class="content_title">Select the Properties that You Want to Distribute</div>
+					<div class="content_subtitle">Indicate the commission you want to offer, the cleaning fee and any
+						security deposit required.
+					</div>
+				</div>
+
+				<div class="step3_select_all_div step_select_all_div">
+					<div class="select_all_checkbox_div">
+						<label style="font-size: 20px;">
+							<input ng-change="pageStep3.triggerSelectAll()" ng-model="pageStep3.products.selected"
+							       type="checkbox" name="step3SelectAllProperties" class="checkbox_field"/>
+							<!--  checkbox-all="pageStep3.products.selected" -->
+							Select All
+						</label>
+					</div>
+
+					<div ng-show="pageStep3.isError || pageStep3.errorStep()" class="step3_validaton_error_message">
+						<div class="step3_validaton_error_message_wrapper">
+							<img src="img/validation_error_sign.png" alt="error"> {{pageStep3.message}}
+						</div>
+					</div>
+
+					<div class="products_count">
+						Total Properties: {{pageStep3.products.total_count}}
+					</div>
+
+					<div class="clearer"></div>
+				</div>
+
+				<form name="reg3Form" class="registration_step_form" novalidate>
+					<table class="data_table table_data_step3" style="margin: 0 0 10px">
+						<thead>
+						<tr class="heading_row">
+							<td class="highlighted_heading_cell_no_border"
+							    ng-click="step3TableOrderBy='description'; reverse=!reverse">Description
+							</td>
+							<td ng-click="step3TableOrderBy='address'; reverse=!reverse">Address</td>
+							<td ng-click="step3TableOrderBy='location'; reverse=!reverse">Location</td>
+							<td class="td_last_column_border" style="padding: 0 5px"
+							    ng-click="step3TableOrderBy='country'; reverse=!reverse">Country
+							</td>
+							<td class="highlighted_heading_cell_border heading_cell_two_line_text" style="width: 125px;"
+							    ng-click="step3TableOrderBy='commission'; reverse=!reverse">Commission Offered 
+							</td>
+							<td class="highlighted_heading_cell_border heading_cell_two_line_text" style="width: 80px;"
+							    ng-click="step3TableOrderBy='cleaning_fee'; reverse=!reverse">Cleaning<br/>Fee
+							</td>
+							<td class="highlighted_heading_cell_no_border heading_cell_two_line_text"
+							    style="width: 80px;" ng-click="step3TableOrderBy='deposit'; reverse=!reverse">
+								Security<br/>Deposit
+							</td>
+						</tr>
+						</thead>
+
+						<tbody ng-repeat="product in pageStep3.products.list | orderBy:step3TableOrderBy:reverse">
+						<tr ng-class-odd="'odd_row_style'"
+						    ng-class="{true: 'error_validation'}[pageStep3.isStep && !reg3Form.$valid]">
+							<td class="td_with_checkbox">
+								<input ng-change="pageStep3.triggerSelectOne(product.selected)" type="checkbox"
+								       class="checkbox_field table_checkbox_field" name="propertyCheckbox"
+								       ng-model="product.selected"/>
+								<span class="table_checkbox_label">{{product.description}}</span>
+							</td>
+							<td>{{product.address}}</td>
+							<td>{{product.location}}</td>
+							<td>{{product.country}}</td>
+							<td><input type="number" class="table_input_text_field" min="0" name="commisionOfferedTable"
+							           ng-model="product.commission" ng-required="product.selected"/>%
+							</td>
+							<td>$<input type="number" class="table_input_text_field" min="0" name="cleaningFeeTable"
+							            ng-model="product.cleaning_fee" ng-required="product.selected"/></td>
+							<td class="td_last_column_border">$<input type="number" class="table_input_text_field"
+							                                          min="0" name="securityDepositTable"
+							                                          ng-model="product.deposit"
+							                                          ng-required="oneRowElem.selected"/></td>
+						</tr>
+						</tbody>
+					</table>
+					<div class="products_pagination">
+						<a href="#" ng-click="pageStep3.getPage(1)" ng-class="pageStep3.isNotUse(1)">&laquo;</a>
+						<a href="#" ng-click="pageStep3.getPage(pageStep3.products.prev_page)"
+						   ng-class="pageStep3.isNotUse(pageStep3.products.prev_page)">&lsaquo;</a>
+
+						<a ng-if="(pageStep3.products.page - 5) > 1" class="not_use">..</a>
+
+						<a href="#" ng-click="pageStep3.getPage(n)" ng-repeat="n in pageStep3.getActivePages()"
+						   ng-class="pageStep3.isCurrentPage(n)">{{n}}</a>
+
+						<a ng-if="(pageStep3.products.page + 5) < pageStep3.products.count_page" class="not_use">..</a>
+
+						<a href="#" ng-click="pageStep3.getPage(pageStep3.products.next_page)"
+						   ng-class="pageStep3.isNotUse(pageStep3.products.next_page)">&rsaquo;</a>
+						<a href="#" ng-click="pageStep3.getPage(pageStep3.products.count_page)"
+						   ng-class="pageStep3.isNotUse(pageStep3.products.count_page)">&raquo;</a>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="content_separator_line"></div>
+
+		<div class="footer_buttons_wrapper">
+			<div class="next_button_div" ng-click="pageStep3.next(true)"></div>
+			<div class="save_button_div" ng-click="pageStep3.next(false)"></div>
+			<div class="back_button_div" ng-click="pageStep3.back()"></div>
+			<div class="clearer"></div>
+		</div>
+	</div>
+</div>
+
+<!-- STEP 4-->
+<div id="step4Page" class="ng-hide" ng-show="showPage==4">
+
+<div class="menu_progres_bar_horizontal_div">
+	<div class="menu_progres_bar_wrapper">
+		<div class="menu_div">
+			<div class="menu_item menu_item_passed menu_item_line_space">1</div>
+			<div class="menu_item menu_item_passed menu_item_line_space">2</div>
+			<div class="menu_item menu_item_passed menu_item_line_space">3</div>
+			<div class="menu_item menu_item_current menu_item_line_space">4</div>
+			<div class="menu_item menu_item_future menu_item_line_space">5</div>
+			<div class="menu_item menu_item_future menu_item_line_space">6</div>
+			<div class="menu_item menu_item_future">7</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrapper">
+<div class="content_wrapper">
+<div class="content contentTextBlue">
+
+<div class="content_title_div">
+	<div class="content_title">What Are Your Billing Policies?</div>
+	<div class="content_subtitle">We'll incorporate these into each payment request for your listings
+	</div>
+</div>
+
+<form name="reg4Form" class="registration_step_form" novalidate>
+
+<div ng-class="{true: 'error_validation'}[pageStep4.isStep && !reg4Form.$valid]">
+
+<div ng-show="pageStep4.isError || pageStep4.errorStep()" class="step4_validaton_error_message">
+	<img src="img/validation_error_sign.png" alt="error"> {{pageStep4.message}}
+</div>
+
+<div class="content_green_box_wrapper content_green_box_step4_wrapper">
+	<div class="content_green_box">
+		<div class="green_box_title_div"><strong>Payment Terms</strong> (Select One)</div>
+		<div class="green_box_content">
+			<div class="green_box_row margin_top_15">
+				<input type="checkbox" ng-model="step4.paymentOption[0].selected"
+				       ng-required="!isSomeCheckboxSelectedFromArray(step4.paymentOption)"
+				       ng-change="checkboxGroupDeselectOthers(step4.paymentOption, step4.paymentOption[0].id)"
+				       id="singlePaymentTermsCheckbox" name="singlePaymentTermsCheckbox"
+				       class="checkbox_field"/>
+
+				<div class="regular_text"><strong>Single payment</strong> (Traveler pays 100% at
+					the time of booking)
+				</div>
+			</div>
+			<div class="clearer"></div>
+			<div class="green_box_content_separator"></div>
+
+			<div class="green_box_row margin_top_15">
+				<input type="checkbox" ng-model="step4.paymentOption[1].selected"
+				       ng-required="!isSomeCheckboxSelectedFromArray(step4.paymentOption)"
+				       ng-change="checkboxGroupDeselectOthers(step4.paymentOption, step4.paymentOption[1].id)"
+				       id="twoPaymentTermsCheckbox" name="twoPaymentTermsCheckbox"
+				       class="checkbox_field"/>
+
+				<div class="regular_text"><strong>Two payments</strong></div>
+			</div>
+			<div class="clearer"></div>
+			<div class="green_box_row last_row_margin_bottom" style="margin-left: 27px;">
+				<div class="text_in_field_row">Due at time of booking</div>
+				<div class="field_div">
+					<input ng-model="step4.paymentTimeOfBooking"
+					       ng-required="step4.paymentOption[1].selected"
+					       name="timeOfBooking" id="timeOfBooking"
+					       type="number" min="0" max="{{paymentBookingListStep4[step4.paymentTimeOfBookingType-1].max}}"
+					       class="input_text_field_custom_width small_text_field"/>
+				</div>
+				<div class="field_div">
+					<select ng-model="step4.paymentTimeOfBookingType"
+					        ng-options="type.id as type.name for type in paymentBookingListStep4"
+					        name="timeOfBookingSelect" id="timeOfBookingSelect" type="text"
+					        class="select_field_custom_width small_select_field">
+					</select>
+				</div>
+				<div class="text_in_field_row text_in_middle_of_field_row">Reminder Due</div>
+				<div class="field_div">
+					<select ng-model="step4.reminderDueType"
+					        ng-options="type.id as type.name for type in paymentReminderListStep4"
+					        name="reminderDueSelect" id="reminderDueSelect" type="text"
+					        class="select_field_custom_width select_field_reminder_due">
+					</select>
+				</div>
+				<div class="clearer"></div>
+			</div>
+
+		</div>
+	</div>
+	<div class="content_green_box_separator_line"></div>
+</div>
+
+<div class="content_green_box_wrapper content_green_box_step4_wrapper">
+	<div class="content_green_box">
+		<div class="green_box_title_div"><strong>Cancellation Policies</strong> (Select One)</div>
+		<div class="green_box_content">
+			<div class="green_box_content_title">
+				We'll show these to your traveler during the booking process
+			</div>
+			<div class="green_box_row margin_top_15">
+				<input type="checkbox" ng-model="step4.cancellationOption[0].selected"
+				       ng-required="!isSomeCheckboxSelectedFromArray(step4.cancellationOption)"
+				       ng-change="checkboxGroupDeselectOthers(step4.cancellationOption, step4.cancellationOption[0].id)"
+				       id="cancelUpToDayCheckbox" name="cancelUpToDayCheckbox"
+				       class="checkbox_field"/>
+
+				<div class="regular_text">
+					<strong>Traveler can cancel up to the day of the trip and still receive fill refunds</strong>
+				</div>
+			</div>
+			<div class="clearer"></div>
+			<div class="green_box_content_separator"></div>
+
+			<div class="green_box_row margin_top_15">
+				<input type="checkbox" ng-model="step4.cancellationOption[1].selected"
+				       ng-hide="$index"
+				       ng-required="!isSomeCheckboxSelectedFromArray(step4.cancellationOption)"
+				       ng-change="checkboxGroupDeselectOthers(step4.cancellationOption, step4.cancellationOption[1].id)"
+				       id="cancelOtherCheckbox" name="cancelOtherCheckbox"
+				       class="checkbox_field_in_field_row"/>
+			</div>
+
+			<div class="green_box_row margin_top_15" style="margin-left: 28px" ng-repeat="row in pageStep4.tmpData.cancelation_policies">
+				<div class="text_in_field_row"><strong>Traveler can cancel up to</strong></div>
+				<div class="field_div">
+
+					<input min="0" max="999" type="number" class="input_text_field_custom_width small_text_field cp" type="number"
+					       ng-model="row.cancelation_time"
+					       ng-required="step4.cancellationOption[1].selected"
+					       ng-class="row.error_cancelation_time" />
+				</div>
+				<div class="text_in_field_row text_in_middle_of_field_row">
+					<strong>day before check in &amp; receive refund of</strong>
+				</div>
+				<div class="field_div">
+					<input min="0" max="100" type="number" class="input_text_field_custom_width small_text_field cp"
+					       ng-required="step4.cancellationOption[1].selected"
+					       ng-model="row.cancelation_refund"/><!-- cancel_refund_percent_field -->
+					<strong>%</strong>
+				</div>
+				<div class="text_in_field_row text_in_middle_of_field_row">
+					<strong>less transaction fee $</strong>
+				</div>
+				<div class="field_div">
+					<input type="number" class="input_text_field_custom_width small_text_field cp"
+					       ng-model="row.cancelation_transaction_fee" />
+				</div>
+				<button ng-show="pageStep4.tmpData.cancelation_policies.length > 1" class="del-button" ng-click="pageStep4.delCancelation($index)">x</button>
+				<div class="clearer"></div>
+			</div>
+
+			<div class="add-button-wrapper">
+				<button class="add-button" ng-click="pageStep4.addCancelation()"><span class="icon">+</span>Add more</button>
+			</div>
+			<div class="clearer"></div>
+
+		</div>
+	</div>
+	<div class="content_green_box_separator_line"></div>
+</div>
+
+<div class="content_green_box_wrapper content_green_box_step4_wrapper">
+	<div class="content_green_box">
+		<div class="green_box_title_div"><strong>Terms and Conditions</strong></div>
+		<div class="green_box_content">
+			<div class="green_box_row margin_top_15 last_row_margin_bottom">
+				<div class="text_in_field_row text_in_middle_of_field_row">
+					<strong>Check in time</strong>
+				</div>
+				<div class="field_div">
+					<select class="input_text_field_custom_width small_text_field" ng-model="pageStep4.tmpData.check_in_time[0]">
+						<option ng-repeat="hour in ngRepeatHour">{{hour}}</option>
+					</select>
+					<strong>:</strong>
+					<select class="input_text_field_custom_width small_text_field" ng-model="pageStep4.tmpData.check_in_time[1]">
+						<option ng-repeat="time in ngRepeatTime">{{time}}</option>
+					</select>
+					<select class="input_text_field_custom_width small_text_field" ng-model="pageStep4.tmpData.check_in_time[2]">
+						<option>AM</option>
+						<option>PM</option>
+					</select>
+				</div>
+
+				<div style="margin-left: 30px" class="text_in_field_row text_in_middle_of_field_row">
+					<strong>Check out time</strong>
+				</div>
+				<div class="field_div">
+					<select class="input_text_field_custom_width small_text_field" ng-model="pageStep4.tmpData.check_out_time[0]">
+						<option ng-repeat="hour in ngRepeatHour">{{hour}}</option>
+					</select>
+					<strong>:</strong>
+					<select class="input_text_field_custom_width small_text_field" ng-model="pageStep4.tmpData.check_out_time[1]">
+						<option ng-repeat="time in ngRepeatTime">{{time}}</option>
+					</select>
+					<select class="input_text_field_custom_width small_text_field" ng-model="pageStep4.tmpData.check_out_time[2]">
+						<option>AM</option>
+						<option>PM</option>
+					</select>
+				</div>
+				<div class="clearer"></div>
+
+				<div style="font-weight: bold; color: #11395E">
+					<p><label><input type="radio" ng-click="pageStep4.tmpData.pm_time = true" ng-checked="pageStep4.tmpData.pm_time" /> I have one checkin/checkout time for all my properties</label></p>
+					<p><label><input type="radio" ng-click="pageStep4.tmpData.pm_time = false" ng-checked="!pageStep4.tmpData.pm_time" /> I have different checkin/checkout rules for my properties</label></p>
+					<div class="green_box_content_separator"></div>
+				</div>
+			</div>
+
+			<div class="green_box_row margin_top_15 last_row_margin_bottom">
+				<div class="field_div terms_cond_box">
+					<div class="terms_cond_box_name">Provide a link to your properties terms and conditions</div>
+					<div><input type="text" class="input_text_field_custom_width" style="width: 400px" ng-model="pageStep4.tmpData.terms_link"/></div>
+					<span>(ie. http://www.propertyterms.com)</span>
+				</div>
+
+				<h2 class="field_div terms_cond_box_or">OR</h2>
+
+				<div class="field_div terms_cond_box">
+					<div class="terms_cond_box_name">Upload a file in PDF format bellow</div>
+					<div>
+						<input type="file" file-input="files" class="input_text_field_custom_width file" style="width: 250px"/>
+						<button ng-click="pageStep4.fileUp()" type="button" class="upload-button" style="">Upload</button>
+					</div>
+					<span>(Click browse to locate your file on your computer, PDF file max size {{pageStep4.getMaxFileSize()}}M)</span>
+				</div>
+				<div class="clearer"></div>
+			</div>
+		</div>
+	</div>
+	<div class="content_green_box_separator_line"></div>
+</div>
+
+<div class="content_green_box_wrapper content_green_box_step4_wrapper">
+	<div class="content_green_box">
+		<div class="green_box_title_div"><strong>Damage Coverage</strong> (Select One)</div>
+
+		<div class="green_box_content">
+			<div class="green_box_row demage_coverage_row_line margin_top_15">
+				<input type="checkbox" ng-model="step4.damageOption[2].selected"
+				       ng-required="!isSomeCheckboxSelectedFromArray(step4.damageOption)"
+				       ng-change="checkboxGroupDeselectOthers(step4.damageOption, step4.damageOption[2].id)"
+				       id="cancelUpToDayCheckbox" id="damageInsuranceCheckbox"
+				       name="damageInsuranceCheckbox" class="checkbox_field_in_field_row"/>
+
+				<div class="text_in_field_row"><strong>Damage Insurance</strong></div>
+				<div class="field_div">
+					<select ng-model="step4.damageInsuranceType"
+					        ng-options="type.id as type.name for type in damageInsuranceListStep4"
+					        name="damageInsuranceSelect" id="damageInsuranceSelect" type="text"
+					        class="select_field_custom_width select_damage_insurance">
+					</select>
+				</div>
+				<div class="info_btn_in_field_row">
+					<div class="info_small_btn_div"></div>
+				</div>
+			</div>
+			<div class="clearer"></div>
+
+			<div class="green_box_row demage_coverage_row_line">
+				<input type="checkbox" ng-model="step4.damageOption[1].selected"
+				       ng-required="!isSomeCheckboxSelectedFromArray(step4.damageOption)"
+				       ng-change="checkboxGroupDeselectOthers(step4.damageOption, step4.damageOption[1].id)"
+				       id="damageRefundableDepositCheckbox"
+				       name="damageRefundableDepositCheckbox"
+				       class="checkbox_field_in_field_row"/>
+
+				<div class="text_in_field_row"><strong>Refundable Deposit</strong></div>
+				<div class="info_btn_in_field_row">
+					<div class="info_small_btn_div"></div>
+				</div>
+				<div class="clearer"></div>
+			</div>
+
+			<div class="green_box_row demage_coverage_row_line last_row_margin_bottom">
+				<input type="checkbox" ng-model="step4.damageOption[0].selected"
+				       ng-required="!isSomeCheckboxSelectedFromArray(step4.damageOption)"
+				       ng-change="checkboxGroupDeselectOthers(step4.damageOption, step4.damageOption[0].id)"
+				       id="damageCoverageNoneCheckbox" name="damageCoverageNoneCheckbox"
+				       class="checkbox_field_in_field_row"/>
+
+				<div class="text_in_field_row"><strong>None</strong></div>
+				<div class="clearer"></div>
+			</div>
+			<div class="clearer"></div>
+		</div>
+	</div>
+	<div class="content_green_box_separator_line"></div>
+</div>
+
+<div class="content_green_box_wrapper content_green_box_step4_wrapper">
+	<div class="content_green_box">
+		<div class="green_box_title_div"><strong>Currency</strong></div>
+		<div class="green_box_content">
+			<div class="green_box_content_title">Choose a currency for the prices we show to
+				travelers. All transactions are converted to USD.
+			</div>
+			<div class="green_box_row margin_top_15 green_box_content_centered_row last_row_margin_bottom">
+				<select ng-model="pageStep4.tmpData.currency"
+				        ng-options="type.ID as type.Name for type in pageStep4.currencyList"
+				        name="currencySelect" type="text" class="select_field_general">
+				</select>
+			</div>
+			<div class="clearer"></div>
+		</div>
+	</div>
+	<div class="content_green_box_separator_line"></div>
+</div>
+
+</div>
+</form>
+
+</div>
+</div>
+
+<div class="content_separator_line"></div>
+
+<div class="footer_buttons_wrapper">
+	<div class="next_button_div" ng-click="pageStep4.next(true)"></div>
+	<div class="save_button_div" ng-click="pageStep4.next(false)"></div>
+	<div class="back_button_div" ng-click="pageStep4.back()"></div>
+	<div class="clearer"></div>
+</div>
+</div>
+</div>
+
+<!-- STEP 5-->
+<div id="step5Page" class="ng-hide" ng-show="showPage==5">
+
+<div class="menu_progres_bar_horizontal_div">
+	<div class="menu_progres_bar_wrapper">
+		<div class="menu_div">
+			<div class="menu_item menu_item_passed menu_item_line_space">1</div>
+			<div class="menu_item menu_item_passed menu_item_line_space">2</div>
+			<div class="menu_item menu_item_passed menu_item_line_space">3</div>
+			<div class="menu_item menu_item_passed menu_item_line_space">4</div>
+			<div class="menu_item menu_item_current menu_item_line_space">5</div>
+			<div class="menu_item menu_item_future menu_item_line_space">6</div>
+			<div class="menu_item menu_item_future">7</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrapper">
+<div class="content_wrapper">
+<div class="content contentTextBlue">
+<div class="step5_title_with_image">
+	<img src="img/credit_card_icon.png" class="credit_card_icon"/>
+
+	<div class="content_title_step5_div">
+		<div class="content_title">Accept Credit Cards:</div>
+		<div class="content_subtitle">
+			To enable online booking for your rentals you will need to set up
+			credit card processing. If you have an existing credit card processing account you will
+			need to set up your payment gateway. If you do not have one or you are using a gateway not
+			supported by us you can set up one with our payment provider Vacation Rent Payment.
+		</div>
+	</div>
+	<div class="clearer"></div>
+</div>
+
+<form name="reg5Form" class="registration_step_form" novalidate>
+<div ng-show="pageStep5.isError || pageStep5.errorStep()" class="step5_validaton_error_message">
+	<img src="img/validation_error_sign.png" alt="error"> {{pageStep5.message}}
+</div>
+
+<div class="content_green_box_wrapper content_green_box_step5_wrapper">
+	<div class="content_green_box">
+		<div class="green_box_title_div"><strong>Accepted Credit Cards</strong> (Select All That Apply)</div>
+	</div>
+	<div>
+		<ul class="credit_card_types">
+			<li><strong>We Accept:</strong></li>
+			<li><label><input ng-change="pageStep5.credit_card_select()"
+			                  ng-model="pageStep5.credit_cart.master_card" type="checkbox" name="credit_card_type"/>
+				<img src="./img/credit-card/master-card.jpg" alt="Master Card"/></label></li>
+			<li><label><input ng-change="pageStep5.credit_card_select()" ng-model="pageStep5.credit_cart.visa"
+			                  type="checkbox" name="credit_card_type"/> <img src="./img/credit-card/visa.jpg"
+			                                                                 alt="Visa"/></label></li>
+			<li><label><input ng-change="pageStep5.credit_card_select()"
+			                  ng-model="pageStep5.credit_cart.american_express" type="checkbox"
+			                  name="credit_card_type"/> <img src="./img/credit-card/american-express.jpg"
+			                                                 alt="American Express"/></label></li>
+			<li><label><input ng-change="pageStep5.credit_card_select()" ng-model="pageStep5.credit_cart.discover"
+			                  type="checkbox" name="credit_card_type"/> <img src="./img/credit-card/discover.jpg"
+			                                                                 alt="Discover"/></label></li>
+			<li><label><input ng-change="pageStep5.credit_card_select()" ng-model="pageStep5.credit_cart.diners_club"
+			                  type="checkbox" name="credit_card_type"/> <img src="./img/credit-card/dines-club.jpg" alt="Diners Club"/></label></li>
+			<li><label><input ng-change="pageStep5.credit_card_select()" ng-model="pageStep5.credit_cart.jbc" type="checkbox" name="credit_card_type"/> <img src="./img/credit-card/jcb.jpg"   alt="JBC"/></label></li>
+			<li><label><input ng-change="pageStep5.credit_card_none()" ng-model="pageStep5.credit_cart_reset" type="checkbox" name="credit_card_type_none"/> None</label></li>
+		</ul>
+	</div>
+</div>
+
+<div class="content_green_box_wrapper content_green_box_step5_wrapper"
+     ng-class="{true: 'error_validation'}[!reg5Form.$valid]">
+	<div class="content_green_box">
+		<div class="green_box_title_div"><strong>Online Payment Options</strong> (Select One)</div>
+		<div class="green_box_content">
+			<div ng-show="!pageStep5.credit_cart_reset">
+				<div class="green_box_row margin_top_30">
+					<input type="checkbox" ng-model="step5.paymentOption[0].selected"
+					       ng-required="!isSomeCheckboxSelectedFromArray(step5.paymentOption)"
+					       ng-change="checkboxGroupDeselectOthers(step5.paymentOption, step5.paymentOption[0].id)"
+					       id="bookingPalPaymentOptionCheckbox" name="bookingPalPaymentOptionCheckbox"
+					       class="checkbox_field"/>
+
+					<div class="regular_text"><strong>Select <i>BookingPal</i> to process your payments</strong>
+					</div>
+					<div class="clearer"></div>
+				</div>
+				<div class="green_box_content_separator"></div>
+
+				<div class="green_box_row margin_top_15">
+					<input type="checkbox" ng-model="step5.paymentOption[1].selected"
+					       ng-required="!isSomeCheckboxSelectedFromArray(step5.paymentOption)"
+					       ng-change="checkboxGroupDeselectOthers(step5.paymentOption, step5.paymentOption[1].id)"
+					       id="userOwnPaymentOptionCheckbox" name="userOwnPaymentOptionCheckbox"
+					       class="checkbox_field"/>
+
+					<div class="regular_text"><strong>Use your own payment gateway or set up a new gateway</strong>
+					</div>
+					<div class="clearer"></div>
+				</div>
+
+				<div class="blue_boxes_div">
+					<div class="step5_blue_box" style="margin: 0 auto;">
+						<div class="blue_box_title_div">Select a Gateway</div>
+						<div class="blue_box_content">
+							<div class="select_gateway_div">
+								<!--<select ng-model="step5.gateway" ng-options="type as type.name for type in gatewayListStep5" id="selectGatewaySelect" class="select_field_custom_width select_gateway_select"></select>-->
+								<div id="SelelctorGateway" class="selector"
+								     click-only-here="pageStep5.selectGatewayView">
+									<a class="selector-title">
+										{{pageStep5.activeGateway.name}}
+										<span ng-show="pageStep5.selectGatewayView">&#x25B2;</span>
+										<span ng-hide="pageStep5.selectGatewayView">&#x25BC;</span>
+									</a>
+									<ul class="selector-list" ng-show="pageStep5.selectGatewayView">
+										<li ng-repeat="row in pageStep5.gateway"><a
+												ng-click="pageStep5.selectGateway(row)" href="#">{{row.name}}</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="blue_box_field_row"
+							     ng-repeat="oneRowElem in pageStep5.activeGateway.fields">
+								<div class="blue_box_field_label">{{oneRowElem.name}}</div>
+								<div class="blue_box_field_input">
+
+									<input ng-model="oneRowElem.value"
+									       ng-required="step5.paymentOption[1].selected && pageStep5.isStep"
+									       name="gatewayId" id="gatewayId"
+									       type="text"
+									       class="input_text_field_custom_width step5_text_field"/>
+
+									<a class="button_wtf" href="#"
+									   ng-click="wtf_ClientID=!wtf_ClientID"></a>
+
+									<div class="description_wtf step5" ng-show="!!wtf_ClientID">
+										<p><strong>{{oneRowElem.info.title}}</strong></p>
+
+										<p>{{oneRowElem.info.desc}}</p>
+									</div>
+								</div>
+								<div class="clearer"></div>
+							</div>
+						</div>
+					</div>
+					<div class="clearer"></div>
+				</div>
+
+				<div class="green_box_content_separator"></div>
+			</div>
+
+
+			<div class="green_box_row margin_top_15">
+				<input type="checkbox" ng-model="step5.paymentOption[2].selected"
+				       ng-required="!isSomeCheckboxSelectedFromArray(step5.paymentOption)"
+				       ng-change="checkboxGroupDeselectOthers(step5.paymentOption, step5.paymentOption[2].id)"
+				       id="noneOwnPaymentOptionCheckbox" name="noneOwnPaymentOptionCheckbox"
+				       class="checkbox_field"/>
+
+				<div class="regular_text">
+					<strong>None</strong>
+
+				</div>
+				<p class="clearer" style="margin-left: 28px">
+					You will get your booking confirmations via email.
+					You will be responsible for charging the renter, BookingPal will assume that a payment has been
+					made and record the booking.
+					If you have an API that can accept payments please contact BookingPall for a custom integration.
+				</p>
+			</div>
+			<div class="clearer" style="margin-bottom: 60px"></div>
+
+		</div>
+	</div>
+	<div class="content_green_box_separator_line"></div>
+</div>
+</form>
+
+<div class="step5_note_text_wrapper">
+	<span class="note_label_span">Notes:</span> Some channel partners process the booking transactions
+	and make the funds available to be deposited into your account net of their fees. Distribution fees
+	and credit card processing fee within 24 hours of guest check-in.
+	<br/> <br/>
+	You will need to select your deposit method and in the next section to receive your funds.
+</div>
+
+</div>
+</div>
+
+<div class="content_separator_line"></div>
+
+<div class="footer_buttons_wrapper">
+	<div class="next_button_div" ng-click="pageStep5.next(true)"></div>
+	<div class="save_button_div" ng-click="pageStep5.next(false)"></div>
+	<div class="back_button_div" ng-click="pageStep5.back()"></div>
+	<div class="clearer"></div>
+</div>
+</div>
+</div>
+
+<!-- STEP 6-->
+<div id="step6Page" class="ng-hide" ng-show="showPage==6">
+
+<div class="menu_progres_bar_horizontal_div">
+	<div class="menu_progres_bar_wrapper">
+		<div class="menu_div">
+			<div class="menu_item menu_item_passed menu_item_line_space">1</div>
+			<div class="menu_item menu_item_passed menu_item_line_space">2</div>
+			<div class="menu_item menu_item_passed menu_item_line_space">3</div>
+			<div class="menu_item menu_item_passed menu_item_line_space">4</div>
+			<div class="menu_item menu_item_passed menu_item_line_space">5</div>
+			<div class="menu_item menu_item_current menu_item_line_space">6</div>
+			<div class="menu_item menu_item_future">7</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrapper">
+<div class="content_wrapper">
+<div class="content contentTextBlue">
+
+<div ng-show="bookingpalpayment" class="content_title_div">
+	<div class="content_title">Receiving Payment from BookingPal</div>
+	<div class="content_subtitle">In order to receive the money for the bookings that you’ve generated through</div>
+	<div class="content_subtitle"><i>BookingPal</i> network you’ll have to set up a deposit method.</div>
+	<div class="step6_second_subtitle">Select One</div>
+</div>
+
+
+<form name="reg6Form" class="registration_step_form " novalidate>
+<div ng-class="{true: 'error_validation'}[pageStep6.isStep && !reg6Form.$valid]">
+
+<div ng-show="pageStep6.isError || pageStep6.validStep()" class="step6_validaton_error_message">
+	<img src="img/validation_error_sign.png" alt="error"/> {{pageStep6.message}}
+</div>
+
+<div ng-show="bookingpalpayment && !isSupportCreditCard" class="step6_green_box_with_checkbox_wrapper">
+	<div class="checkbox_for_green_box">
+		<input type="checkbox" ng-model="step6.receivingOption[0].selected"
+		       ng-required="bookingpalpayment && !isSomeCheckboxSelectedFromArray(step6.receivingOption)"
+		       ng-change="checkboxGroupDeselectOthers(step6.receivingOption, step6.receivingOption[0].id)"
+		       id="depositPaymentReciving" name="depositPaymentReciving" class="checkbox_field"/>
+	</div>
+
+	<div class="content_green_box_wrapper content_green_box_step6_wrapper">
+		<div class="content_green_box">
+			<div class="green_box_title_div"><strong>ACH/Direct deposit:</strong></div>
+			<div class="green_box_content">
+				<div class="step6_regular_text_div">Have your checkbook handy to enter your routing number and
+					account number. Make sure to enter the routing number for ACH/direct deposit and not for
+					international wires. Wait for a small deposit to confirm your account is ready.
+				</div>
+
+				<div class="step6_direct_deposit_payment_hidden_form" ng-show="step6.receivingOption[0].selected">
+					<div class="left_column">
+						<div class="step6_form_row step6_form_row_margin">
+							<div class="step6_form_label">Bank Name</div>
+							<div class="step6_form_field_div">
+								<input ng-model="step6.bankName"
+								       ng-required="bookingpalpayment && step6.receivingOption[0].selected"
+								       name="bankNicknamePayment" id="bankNicknamePayment" type="text"
+								       class="input_text_field_custom_width step6_text_field"/>
+							</div>
+							<div class="clearer"></div>
+						</div>
+
+						<div class="step6_form_row step6_form_row_margin">
+							<div class="step6_form_label">Account Holders Name</div>
+							<div class="step6_form_field_div">
+								<input ng-model="step6.accountHolderName"
+								       ng-required="bookingpalpayment && step6.receivingOption[0].selected"
+								       name="accountHoldersPayment" id="accountHoldersPayment" type="text"
+								       class="input_text_field_custom_width step6_text_field"/>
+							</div>
+							<div class="clearer"></div>
+						</div>
+
+						<div class="step6_form_row step6_form_row_margin">
+							<div class="step6_form_label">Routing Number (10 digits)</div>
+							<div class="step6_form_field_div">
+								<input ng-model="step6.routingNumber" maxlength="10" ng-maxlength="10"
+								       ng-required="bookingpalpayment && step6.receivingOption[0].selected"
+								       name="routingNumberPayment" id="routingNumberPayment" type="text"
+								       class="input_text_field_custom_width step6_text_field"/>
+							</div>
+							<div class="clearer"></div>
+						</div>
+
+						<div class="step6_form_row step6_form_row_margin">
+							<div class="step6_form_label">Account Number</div>
+							<div class="step6_form_field_div">
+								<input ng-model="step6.accountNumber"
+								       ng-required="bookingpalpayment && step6.receivingOption[0].selected"
+								       name="accountNumberPayment" id="accountNumberPayment" type="text"
+								       class="input_text_field_custom_width step6_text_field"/>
+							</div>
+							<div class="clearer"></div>
+						</div>
+
+						<div class="step6_form_row step6_form_row_margin">
+							<div class="step6_form_label">Account Type</div>
+							<div class="step6_form_field_div">
+								<select ng-model="step6.accountType"
+								        ng-options="type.name as type.name for type in achAccountTypeListStep6"
+								        name="accountTypePaymentSelect" id="accountTypePaymentSelect"
+								        type="text" class="select_field_custom_width step6_select_field">
+								</select>
+							</div>
+							<div class="clearer"></div>
+						</div>
+
+						<div ng-show="user.countryid=='US'" class="step6_form_row step6_form_row_margin">
+							<div class="step6_form_label">Social Security # or Tax ID</div>
+							<div class="step6_form_field_div">
+								<input ng-model="step6.socialOrTaxNumber"
+								       ng-required="(bookingpalpayment && step6.receivingOption[0].selected) && user.countryid=='US'"
+								       name="socialSecurityPayment" id="socialSecurityPayment" type="number"
+								       class="input_text_field_custom_width step6_text_field"/>
+							</div>
+							<div class="clearer"></div>
+						</div>
+
+						<div class="step6_form_row">
+							<div class="step6_form_label">Your Date of Birth</div>
+							<div class="step6_form_field_div">
+								<select ng-model="step6.dayBirthDate" name="dayBitrhDatePaymentSelect"
+								        ng-options="day as day for day in dayBirthDateListStep6"
+								        id="dayBitrhDatePaymentSelect" type="text"
+								        class="select_field_custom_width step6_date_select_field step6_date_select_field_margin">
+								</select>
+
+								<select ng-model="step6.monthBirthDate"
+								        ng-options="month.id as month.name for month in monthBirthDateListStep6"
+								        name="monthBitrhDatePaymentSelect" id="monthBitrhDatePaymentSelect"
+								        type="text"
+								        class="select_field_custom_width step6_date_select_field step6_date_select_field_margin">
+								</select>
+
+								<select ng-model="step6.yearBirthDate"
+								        ng-options="year as year for year in yearBirthDateListStep6"
+								        name="yearBitrhDatePaymentSelect" id="yearBitrhDatePaymentSelect"
+								        type="text" class="select_field_custom_width step6_date_select_field">
+								</select>
+
+								<div class="clearer"></div>
+							</div>
+							<div class="clearer"></div>
+						</div>
+
+					</div>
+
+					<div class="right_column">
+						<div class="credit_card_info_image_div"><img src="img/credit_card_info_sample.png"
+						                                             alt=""></div>
+
+						<div ng-show="user.countryid=='US'" class="step6_social_security_radio_div">
+							<div class="one_option_div">
+								<input ng-model="step6.socialOrTaxType" type="radio"
+								       name="socialSecurityOptionPayment" value="ssn" class="option_radiobtn">
+
+								<div class="option_label">SSN</div>
+								<div class="clearer"></div>
+							</div>
+							<div class="one_option_div">
+								<input ng-model="step6.socialOrTaxType" type="radio"
+								       name="socialSecurityOptionPayment" value="ein" class="option_radiobtn">
+
+								<div class="option_label">EIN</div>
+								<div class="clearer"></div>
+							</div>
+							<div class="clearer"></div>
+						</div>
+
+					</div>
+					<div class="clearer"></div>
+				</div>
+
+				<div class="clearer"></div>
+
+			</div>
+		</div>
+		<div class="content_green_box_separator_line"></div>
+	</div>
+	<div class="clearer"></div>
+</div>
+
+
+<div ng-show="bookingpalpayment && !isSupportCreditCard" class="step6_green_box_with_checkbox_wrapper">
+	<div class="checkbox_for_green_box">
+		<input type="checkbox" ng-model="step6.receivingOption[1].selected"
+		       ng-required="bookingpalpayment &&  !isSomeCheckboxSelectedFromArray(step6.receivingOption)"
+		       ng-change="checkboxGroupDeselectOthers(step6.receivingOption, step6.receivingOption[1].id)"
+		       id="paypalPaymentReciving" name="paypalPaymentReciving" class="checkbox_field"/>
+	</div>
+
+	<div class="content_green_box_wrapper content_green_box_step6_wrapper">
+		<div class="content_green_box">
+			<div class="green_box_title_div"><strong>PayPal:</strong></div>
+			<div class="green_box_content">
+				<div class="step6_regular_text_div">Your PayPal account is an email address. Please make sure
+					that it is activated on PayPal.
+				</div>
+				<div class="green_box_row last_row_margin_bottom">
+					<div class="text_in_field_row">Enter you PayPal ID</div>
+					<div class="field_div"><input ng-model="step6.paypalId"
+					                              ng-required="bookingpalpayment &&  step6.receivingOption[1].selected"
+					                              name="paypalPaymentRecivingValue"
+					                              id="paypalPaymentRecivingValue" type="text"
+					                              class="input_text_field_custom_width paypal_text_field"/>
+					</div>
+					<div class="clearer"></div>
+				</div>
+
+			</div>
+			<div class="gray_note_wrapper">
+				<div class="gray_note_text"><strong>NOTE:</strong> <i>Bookingpal</i> deposit payments into your
+					account 24 hours after guests check in.
+				</div>
+			</div>
+
+		</div>
+		<div class="content_green_box_separator_line"></div>
+	</div>
+	<div class="clearer"></div>
+</div>
+
+
+<div ng-show="bookingpalpayment && !isSupportCreditCard" class="step6_green_box_with_checkbox_wrapper">
+	<div class="checkbox_for_green_box">
+		<input type="checkbox" ng-model="step6.receivingOption[2].selected"
+		       ng-required="bookingpalpayment &&  !isSomeCheckboxSelectedFromArray(step6.receivingOption)"
+		       ng-change="checkboxGroupDeselectOthers(step6.receivingOption, step6.receivingOption[2].id)"
+		       id="mailChecksPaymentReciving" name="mailChecksPaymentReciving" class="checkbox_field"/>
+	</div>
+	<div class="content_green_box_wrapper content_green_box_step6_wrapper">
+		<div class="content_green_box">
+			<div class="green_box_title_div"><strong>Mail Checks:</strong></div>
+			<div class="green_box_content">
+				<div class="step6_regular_text_div">Only valid mailing addresses in the US or Canada can receive
+					mailed checks.
+				</div>
+			</div>
+		</div>
+		<div class="content_green_box_separator_line"></div>
+	</div>
+	<div class="clearer"></div>
+</div>
+
+<div class="step6_distribution_agreement_title_wrapper">
+	<div class="step6_distribution_agreement_title_only">Distribution Agreement</div>
+</div>
+
+<div ng-class="step6AgreementWrapperClass">
+	<div ng-class="step6AgreementDivClass">
+		<div ng-class="step6AgreementTextClass">
+
+			<h3>CHANNEL PARTNER AGREEMENT</h3>
+
+			<p>The purpose of this Channel Partner Agreement (the "Agreement") dated as of the Effective Date set forth in the signature block below, is to summarize the terms and conditions of the services to be performed by and between BookingPal, Inc. a Delaware corporation (“BookingPal”), with offices located 101 Pacifica, Suite 250 Irvine, CA 92618, and you as ("Channel Partner")</p>
+
+			<ol>
+				<li>
+					<span>BookingPal Obligations</span>
+					<ol>
+						<li>BookingPal shall make information about lodging units (“Rental” or “Rentals”) available to Channel Partner. information about such Rentals (referred to herein as “BookingPal Content”) including but not limited to; photos, property description, Rental rates, availability calendar, cancellation policies, check-in instructions and other terms and conditions associated with each Rental. The exact amount of available inventory of Rentals and related BookingPal Content shall be determined by BookingPal in its sole discretion.</li>
+						<li>BookingPal shall provide a web service for Channel Partner to query BookingPal Content. Other web services may include: a payment interface and booking engine ("Services")</li>
+						<li>BookingPal will ensure that it has contracts in place with Rental owners and managers supplying Rentals so that reservations booked hereunder will be honored.</li>
+					</ol>
+				</li>
+				<li>
+					<span>Channel Partner Obligations</span>
+					<ol>
+						<li>Channel Partner will use BookingPal’s web services to display BookingPal Content or Services in connection with Channel Partner’s Website(s) and/or Mobile Apps as listed herein. Channel Partner’s use of the Services shall be limited to display BookingPal Content on the Website(s) or Channel Partner Mobile Applications. Channel Partner will not publish or distribute the BookingPal Content in any other form or through any other media without prior notification to BookingPal. Channel Partner shall not add, remove or modify BookingPal Content.</li>
+						<li>Channel Partner agrees not to make any representations, warranties or other statements concerning BookingPal, BookingPal's site, any of BookingPal's products or Services, or BookingPal's site policies, except as expressly authorized by BookingPal.</li>
+						<li>Channel Partner agrees not to create or purchase URLs or keywords that include the specific names or allude to specific names of BookingPal, Inc.</li>
+						<li>Upon the execution of this Agreement both Parties shall work together to complete the integration of BookingPal Content into the Channel Partners Website(s) and/or Mobile Apps as listed herein.</li>
+					</ol>
+				</li>
+				<li>
+					<span>Payment Terms</span>
+					<ol>
+						<li>Where Rental Owner/Manager is the Merchant of Record, BookingPal will pay Channel Partner Fifteen (15) days after the end of each calendar month for payments due and collected. Where Channel Partner is the Merchant of Record, Channel Partner will be responsible for paying within the Terms of each Rental Owner/Manager, and BookingPal within Fifteen (15) days after the date of BookingPal’s invoice. Where Channel Partner is the Merchant of Record and has not accepted the payment Terms of the Rental Owner/Manager, Channel Partner will be responsible for paying Rental Owner/Manager, and BookingPal within Fifteen (15) days after the date of BookingPal’s invoice.</li>
+						<li>Where a payment is required hereunder, the Parties hereto agree to (I) make such payment on time as required herein, and (ii) at the time of such payment, remit a brief statement or report containing information (i.e. gross Rentals, deposits, credit card discounts, any fees, etc.) necessary to fully understand the nature of the actions and transactions for the amount received. The Parties to this Agreement agree that they will provide fully transparent information relating to the usage of the BookingPal Content and full analysis thereof upon the request of the other Party.</li>
+					</ol>
+				</li>
+				<li>
+					<span>Term and Termination</span>
+					<ol class="no-number">
+						<li>This Agreement will commence on the date of execution of this Agreement set forth in the signature block below and will continue for successive one-year terms until terminated in writing by either Party. Either Party may, with or without cause, terminate this Agreement with 60 days’ notice.  Any notice under this Agreement may be sent via email, with a confirmation of receipt from the other Party.</li>
+					</ol>
+				</li>
+				<li>
+					<span>Assignment</span>
+					<ol class="no-number">
+						<li>This Agreement is not assignable, except that either Party may assign this agreement without consent in the event that it merges with or is acquired by another company.</li>
+					</ol>
+				</li>
+				<li>
+					<span>Confidentiality</span>
+					<ol class="no-number">
+						<li>Neither BookingPal nor Channel Partner shall disclose the terms or conditions of this Agreement, other than its existence and duration, nor any matters relating to the course of dealings between the Parties. BookingPal will keep confidential and not use for any purpose, other than its performance under this Agreement, any and all information regarding Channel Partner’s business. Channel Partner further agrees that the Services are provided for Channel Partner’s use only, and that Channel Partner will not remarket or otherwise redistribute the Services or any of the compilations of the BookingPal Content  that are contained in the Services to any third parties.</li>
+					</ol>
+				</li>
+				<li>
+					<span>Limitation of Liability</span>
+					<ol class="no-number">
+						<li>IN NO EVENT WILL BOOKINGPAL BE RESPONSIBLE FOR ANY DAMAGES RELATING TO A RENTAL TRANSACTION HEREUNDER SUCH AS, WITHOUT LIMITATION, PROPERTY DAMAGE, BODILY INJURY OR DEATH. IN NO EVENT WILL EITHER PARTY BE LIABLE TO THE OTHER FOR ANY PUNITIVE, INCIDENTAL OR CONSEQUENTIAL DAMAGES IN ANY ACTION ARISING FROM OR RELATED TO THE TERMS AND CONDITIONS OF THIS AGREEMENT, WHETHER BASED IN CONTRACT, TORT (INCLUDING NEGLIGENCE), INTENTIONAL CONDUCT OR OTHERWISE, INCLUDING, WITHOUT LIMITATION, DAMAGES RELATING TO THE LOSS OF RENTALS OR PROFITS, INCOME OR GOODWILL, REGARDLESS OF WHETHER SUCH PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. CHANNEL PARTNER ACKLNOWLEDGES THAT BOOKINGPAL IS NOT A PARTY TO ANY RENTAL AGREEMENT BETWEEN A RENTAL MANAGER OR OWNER AND RENTER OR CHANNEL PARTNER.</li>
+					</ol>
+				</li>
+				<li>
+					<span>Indemnification</span>
+					<ol class="no-number">
+						<li>Each Party agrees to indemnify and hold harmless the other Party to this Agreement from any and all losses, liability, damages, costs, claims, demands, actions, or suits, including reasonable attorneys' fees and court costs in connection with a claim by a third Party, which arise directly or indirectly out of: (i) any breach of this Agreement by the indemnifying Party; and (ii) any act, error or omission of the indemnifying Party in connection with its performance hereunder, and/or (iii) any claim brought by any third Party or guest as a result of the operation of, actions or events occurring at or on, a Property caused by any act, error or omission of the indemnifying Party.</li>
+					</ol>
+				</li>
+				<li>
+					<span>Representations and Warranties</span>
+					<ol class="no-number">
+						<li>Each Party represents and warrants to the other that in performing its obligations under this Agreement it will comply with all applicable federal, state, provincial and local laws and regulations and that it is free of any contractual obligations  or other restrictions that would prevent it from entering into and performing its obligations under this Agreement.</li>
+					</ol>
+				</li>
+				<li>
+					<span>Governing Law</span>
+					<ol class="no-number">
+						<li>This Agreement shall be governed by the laws of the State of California.  In the event litigation is necessary to resolve a dispute about this Agreement, the prevailing Party shall be entitled to recover reasonable attorneys’ fees and costs.</li>
+					</ol>
+				</li>
+			</ol>
+
+			<p>IN WITNESS WHEREOF, the parties by their duly authorized representatives have executed this Agreement effective as of the Effective Date.</p>
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div class="step6_confirm_text_wrapper registration_checkbox_highlight_form">
+	<div class="step6_confirm_checkbox_div"
+	     ng-class="{true: 'error_validation'}[pageStep6.isStep && !reg6Form.step6ConfirmReadDistributionAgreement.$valid]">
+		<input required ng-model="step6.confirmAgreement" type="checkbox"
+		       id="step6ConfirmReadDistributionAgreement" name="step6ConfirmReadDistributionAgreement"
+		       class="checkbox_field"/>
+	</div>
+	<div class="step6_confirm_text_div"><strong>By checking this box</strong> I confirm that I have read ,
+		understand and accept Bookingpal's Distribution Agreement, And I agree to be bound by the terms of
+		Bookingpal's Distribution Agreement.
+	</div>
+	<div class="clearer"></div>
+</div>
+
+</div>
+</form>
+
+</div>
+</div>
+
+<div class="content_separator_line"></div>
+
+<div class="footer_buttons_wrapper">
+	<div class="submit_button_div" ng-click="pageStep6.next(true)"></div>
+	<div class="save_button_div" ng-click="pageStep6.next(false)"></div>
+	<div class="back_button_div" ng-click="pageStep6.back()"></div>
+	<div class="clearer"></div>
+</div>
+
+</div>
+</div>
+
+<!-- STEP 7-->
+<div id="step7Page" class="ng-hide" ng-show="showPage==7">
+	<div class="menu_progres_bar_horizontal_div">
+		<div class="menu_progres_bar_wrapper">
+			<div class="menu_div">
+				<div class="menu_item menu_item_passed menu_item_line_space">1</div>
+				<div class="menu_item menu_item_passed menu_item_line_space">2</div>
+				<div class="menu_item menu_item_passed menu_item_line_space">3</div>
+				<div class="menu_item menu_item_passed menu_item_line_space">4</div>
+				<div class="menu_item menu_item_passed menu_item_line_space">5</div>
+				<div class="menu_item menu_item_current menu_item_line_space">6</div>
+				<div class="menu_item menu_item_future">7</div>
+			</div>
+		</div>
+	</div>
+	<div class="wrapper" style="margin-top: 40px;">
+		<div class="content_wrapper">
+			<div class="content">
+
+				<form name="reg7Form" class="registration_step_form" novalidate>
+					<div ng-class="{true: 'error_validation'}[submittedStep7 && !reg7Form.$valid]">
+
+						<div ng-show="pageStep7.isError || pageStep7.validStep()" class="step7_validaton_error_message">
+							<img src="img/validation_error_sign.png" alt="error"> {{pageStep7.message}}
+						</div>
+
+						<div class="content_green_box_wrapper content_green_box_step7_wrapper">
+							<div class="content_green_box">
+								<div class="green_box_title_div"><strong>Payment Verification Amount</strong></div>
+								<div class="green_box_content">
+									<div class="green_box_row margin_top_15 last_row_margin_bottom">
+										<div class="text_in_field_row" style="margin-right:10px">Please enter the amount
+											of the posted transaction to your account:
+										</div>
+										<div class="field_div">$<input ng-model="step7.verificationAmount" required
+										                               type="number" name="paymentVerificationAmount"
+										                               id="paymentVerificationAmount"
+										                               class="input_text_field_custom_width step7_amount_text_field"/>
+										</div>
+										<div class="clearer"></div>
+									</div>
+
+									<div class="clearer"></div>
+								</div>
+							</div>
+							<div class="content_green_box_separator_line"></div>
+						</div>
+
+					</div>
+				</form>
+
+			</div>
+		</div>
+
+		<div class="content_separator_line"></div>
+
+		<div class="footer_buttons_wrapper">
+			<div class="next_button_div" ng-click="pageStep7.verify(true)"></div>
+			<div class="clearer"></div>
+		</div>
+	</div>
+</div>
+
+<!-- Step Thank You  -->
+<div class="ng-hide" ng-show="showPage==8">
+	<div class="menu_progres_bar_horizontal_div">
+		<div class="menu_progres_bar_wrapper">
+			<div class="menu_div">
+				<div class="menu_item menu_item_passed menu_item_line_space">1</div>
+				<div class="menu_item menu_item_passed menu_item_line_space">2</div>
+				<div class="menu_item menu_item_passed menu_item_line_space">3</div>
+				<div class="menu_item menu_item_passed menu_item_line_space">4</div>
+				<div class="menu_item menu_item_passed menu_item_line_space">5</div>
+				<div class="menu_item menu_item_passed menu_item_line_space">6</div>
+				<div class="menu_item menu_item_current">7</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="wrapper">
+		<div class="content_wrapper">
+			<div class="content">
+				<div class="thank_you">
+					<h1>Thank You for Registering with <strong>BookingPal</strong>!</h1>
+
+					<a id="go_to_dashboard" href="https://www.mybookingpal.com/auth/login">Go to Dashboard &nbsp;<img src="./img/thank-you-arrow.png" alt=">"></a>
+				</div>
+				<div class="footer_buttons_wrapper">
+					<div class="back_button_div" ng-click="pageStep8.back()"></div>
+					<div class="clearer"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

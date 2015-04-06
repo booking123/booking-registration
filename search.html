@@ -1,0 +1,1864 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="myapp">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>BookingPal</title>
+    
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic|Open+Sans' rel='stylesheet' type='text/css'>
+     
+    <!--
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro|PT+Sans' rel='stylesheet' type='text/css'>
+    -->
+    <link rel="stylesheet" type="text/css" href="css/styleSearch.css" />
+    <link rel="stylesheet" type="text/css" href="css/jqueryUiForDatepicker.css" />
+                                                                             
+    <script src="js/jquery-1.9.1.js" type="text/javascript"></script>
+    <script src="js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+    
+    <script src="js/angular.min.js" type="text/javascript"></script>
+    <script src="js/config.js" type="text/javascript"></script>
+    <script src="js/search_functions_angularjs.js" type="text/javascript"></script>
+    
+    <script src="js/css_browser_selector.js" type="text/javascript"></script>
+
+      
+</head>
+
+<body ng-controller="SearchController" ng-class="{regular_res: resolutionView=='regular', iframe_res: resolutionView=='iframe'}">
+     
+     
+    <!-- Search Page START -->  
+    <div id="searchPage" ng-show="showPage=='search_page'">  
+        <div class="wrapper_wide">
+        
+            <div class="content_wide_width">
+            
+                <div class="header">
+                    <div class="header_main_content">
+                        <img src="img/logo.png" class="logo_img" />
+                        <div class="clearer"></div>
+                    </div>
+                </div>
+                
+                <div class="search_panel">
+                    <div class="search_panel_wrapper">
+                        <div class="search_input_fields">
+                            <input ng-model="search.searchValue" name="searchTextValue" id="searchTextValue" type="text" class="search_main_text_field" placeholder="Where are you going?"/>
+                            <input type="text" ng-model="search.checkInDate" datepicker datepicker-class="datepicker_search_search_panel" date-field-in-range="start" connected-date-field-id-array="search.arrayOfCheckOutFieldsId" connected-date-field-value="search.checkOutDate" class="search_calendar_btn search_input_btn" id="searchCheckInDatepickerField" readonly placeholder="CHECK-IN" />
+                            
+                            <!--
+                            <div class="search_calendar_btn search_input_btn" id="searchCheckInBtn" ng-click="showDatepickerPopup('searchCheckInDatepickerField')" >
+                                <div class="search_input_btn_text">
+                                    <span ng-show="search.checkInDate==''">CHECK-IN</span>
+                                    <span ng-show="search.checkInDate!=''">{{search.checkInDate}}</span> 
+                                </div>
+                            </div>
+                            -->
+                            
+                            <input type="text" ng-model="search.checkOutDate" datepicker datepicker-class="datepicker_search_search_panel" date-field-in-range="end" connected-date-field-id-array="search.arrayOfCheckInFieldsId" connected-date-field-value="search.checkInDate" class="search_calendar_btn search_input_btn" id="searchCheckOutDatepickerField" readonly placeholder="CHECK-OUT" />
+                            <!--
+                            <div class="search_calendar_btn search_input_btn" id="searchCheckOutBtn" ng-click="showDatepickerPopup('searchCheckOutDatepickerField')">
+                                <div class="search_input_btn_text">
+                                    <span ng-show="search.checkOutDate==''">CHECK-OUT</span>
+                                    <span ng-show="search.checkOutDate!=''">{{search.checkOutDate}}</span> 
+                                </div>
+                            </div>
+                            -->
+                            
+                            <select ng-model="search.guests" ng-options="guestsNumber.id as guestsNumber.name for guestsNumber in guestsNumberList" name="searchGuestsNumber" id="searchGuestsNumber" class="search_guest_select_field">
+                                <option value="">GUESTS</option>
+                            </select>
+                            
+                            <div class="clearer"></div>
+                        </div>
+                        <div class="search_btn_div"></div>
+                        <div class="clearer"></div>
+                            
+                        <div ng-click="showAdvancedSearchOption=true" class="search_advanced_div">
+                            <div class="search_advanced_option_icon"></div>
+                            <div class="search_advanced_option_text">Advanced Search Options</div>
+                            <div class="clearer"></div>
+                        </div>
+                        <div class="clearer"></div>
+                    </div>   
+                </div>
+                
+                <div class="search_advanced_panel" ng-show="showAdvancedSearchOption==true">
+                    <div class="search_advanced_panel_content_wrapper">
+                        <div class="search_advanced_left_fields">
+                            <div class="search_advanced_panel_left_row">
+                                <div class="search_advanced_panel_label_left">Property Type: </div>
+                                <div class="search_advanced_panel_field_div">
+                                    <select ng-model="search.propertyType" ng-options="propertyType.id as propertyType.name for propertyType in propertyTypesList" name="searchPropertyType" id="searchPropertyType" class="search_advanced_select_field">
+                                    </select>
+                                </div>
+                                <div class="clearer"></div>
+                            </div>
+                            
+                            <div class="search_advanced_panel_left_row">
+                                <div class="search_advanced_panel_label_left">Number of Bedrooms: </div>
+                                <div class="search_advanced_panel_field_div">
+                                    <select ng-model="search.numberBedrooms" ng-options="numberBedroom.id as numberBedroom.name for numberBedroom in numberOfBedroomsList" name="searchNumberOfBedrooms" id="searchNumberOfBedrooms" class="search_advanced_select_field_small">
+                                    </select>
+                                </div>
+                                <div class="clearer"></div>
+                            </div>
+                            
+                            <div class="search_advanced_panel_left_row">
+                                <div class="search_advanced_panel_label_left">Number of Bathrooms: </div>
+                                <div class="search_advanced_panel_field_div">
+                                    <select ng-model="search.numberBathrooms" ng-options="numberBathroom.id as numberBathroom.name for numberBathroom in numberOfBathroomsList" name="searchNumberOfBathrooms" id="searchNumberOfBathrooms" class="search_advanced_select_field_small">
+                                    </select>
+                                </div>
+                                <div class="clearer"></div>
+                            </div>
+                            
+                            <div class="search_advanced_panel_left_row">
+                                <div class="search_advanced_panel_label_left">Beds: </div>
+                                <div class="search_advanced_panel_field_div">
+                                    <select ng-model="search.numberBeds" ng-options="numberBed.id as numberBed.name for numberBed in numberOfBedsList" name="searchNumberOfBeds" id="searchNumberOfBeds" class="search_advanced_select_field_small">
+                                    </select>
+                                </div>
+                                <div class="clearer"></div>
+                            </div>
+                            
+                            <div class="search_advanced_panel_left_row search_advanced_panel_slider_row">
+                                <div class="search_advanced_panel_label_left">Price Range U.S.: </div>
+                                <div class="search_advanced_panel_field_div">
+                                    <div class="search_price_range_slider_div">   
+                                        <div id="searchPriceRangeSlider"></div>  
+                                    </div>    
+                                </div>
+                                <div class="clearer"></div>
+                            </div>
+                            
+                            <div class="search_advanced_panel_left_row">
+                                <div class="search_advanced_panel_label_left">Keywords: </div>
+                                <div class="search_advanced_panel_field_div">
+                                    <input ng-model="search.keywords" name="searchKeywords" id="searchKeywords" type="text" class="search_advanced_text_field"/>
+                                </div>
+                                <div class="clearer"></div>
+                            </div>
+                            <!--
+                            <div class="search_advanced_panel_left_row_last">
+                                <div class="search_advanced_panel_label_left">Neighborhood: </div>
+                                <div class="search_advanced_panel_field_div">
+                                    <select ng-model="search.neighborhood" ng-options="neighborhood.id as neighborhood.name for neighborhood in neighborhoodList" name="searchNeighborhood" id="searchNeighborhood" class="search_advanced_select_field">
+                                    </select>
+                                </div>
+                                <div class="clearer"></div>
+                            </div>
+                            -->
+                            
+                        </div>
+                        
+                        <div class="search_advanced_right_fields">
+                            <div class="search_advanced_checkbox_title"><strong>Ammenities</strong> (Select all that apply)</div>
+                            <div class="search_advanced_checkbox_wrapper">
+                                <div class="search_advanced_checkbox_content">
+                                    <div class="search_main_checkboxes_with_button_div">
+                                        <div class="search_main_checkboxes_div">
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_first_column">
+                                                <input type="checkbox" ng-model="search.checkboxWirelessInternet" id="searchWirelessInternet" name="searchWirelessInternet" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Wireless Internet</span>
+                                                <div class="clearer"></div>   
+                                            </div> 
+                                            
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_second_column">
+                                                <input type="checkbox" ng-model="search.checkboxTv" id="searchTv" name="searchTv" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">TV</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            
+                                            <div class="search_checkbox_one_option">
+                                                <input type="checkbox" ng-model="search.kitchen" id="searchKitchen" name="searchKitchen" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Kitchen</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div ng-click="showAdvancedSearchOtherCheckboxes= !showAdvancedSearchOtherCheckboxes" class="search_advanced_more_less_checkboxes_btn_div">
+                                            <span ng-show="showAdvancedSearchOtherCheckboxes==true">Less</span>
+                                            <span ng-show="showAdvancedSearchOtherCheckboxes==false">More</span>
+                                        </div>
+                                        
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="search_other_checkboxes_div" ng-show="showAdvancedSearchOtherCheckboxes==true">
+                                        <div class="search_other_checkboxes_one_row_div">
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_first_column">
+                                                <input type="checkbox" ng-model="search.checkboxAirConditioning" id="searchAirConditioning" name="searchAirConditioning" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Air Conditioning</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_second_column">
+                                                <input type="checkbox" ng-model="search.checkboxFamilyKidFriendly" id="searchFamilyKidFriendly" name="searchFamilyKidFriendly" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Family/Kid Friendly</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option">
+                                                <input type="checkbox" ng-model="search.checkboxIndoorFireplace" id="searchIndoorFireplace" name="searchIndoorFireplace" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Indoor Fireplace</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="search_other_checkboxes_one_row_div">
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_first_column">
+                                                <input type="checkbox" ng-model="search.checkboxBreakfast" id="searchBreakfast" name="searchBreakfast" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Breakfast</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_second_column">
+                                                <input type="checkbox" ng-model="search.checkboxFreeParking" id="searchFreeParking" name="searchFreeParking" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Free Parking on Premise</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option">
+                                                <input type="checkbox" ng-model="search.checkboxInternet" id="searchInternet" name="searchInternet" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Internet</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="search_other_checkboxes_one_row_div">
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_first_column">
+                                                <input type="checkbox" ng-model="search.checkboxBuzzerWirelessIntercom" id="searchBuzzerWirelessIntercom" name="searchBuzzerWirelessIntercom" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Buzzer/Wireless Intercom</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_second_column">
+                                                <input type="checkbox" ng-model="search.checkboxGym" id="searchGym" name="searchGym" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Gym</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option">
+                                                <input type="checkbox" ng-model="search.checkboxPetsAllowed" id="searchPetsAllowed" name="searchPetsAllowed" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Pets Allowed</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="search_other_checkboxes_one_row_div">
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_first_column">
+                                                <input type="checkbox" ng-model="search.checkboxCableTv" id="searchCableTv" name="searchCableTv" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Cable TV</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_second_column">
+                                                <input type="checkbox" ng-model="search.checkboxHandicapAccessible" id="searchHandicapAccessible" name="searchHandicapAccessible" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Handicap Accessible</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option">
+                                                <input type="checkbox" ng-model="search.checkboxPool" id="searchPool" name="searchPool" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Pool</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="search_other_checkboxes_one_row_div">
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_first_column">
+                                                <input type="checkbox" ng-model="search.checkboxDoorman" id="searchDoorman" name="searchDoorman" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Doorman</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_second_column">
+                                                <input type="checkbox" ng-model="search.checkboxHeating" id="searchHeating" name="searchHeating" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Heating</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option">
+                                                <input type="checkbox" ng-model="search.checkboxSmokingAllowed" id="searchSmokingAllowed" name="searchSmokingAllowed" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Smoking Allowed</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="search_other_checkboxes_one_row_div">
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_first_column">
+                                                <input type="checkbox" ng-model="search.checkboxDryer" id="searchDryer" name="searchDryer" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Dryer</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_second_column">
+                                                <input type="checkbox" ng-model="search.checkboxHotTub" id="searchHotTub" name="searchHotTub" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Hot Tub</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option">
+                                                <input type="checkbox" ng-model="search.checkboxSuitableForEvents" id="searchSuitableForEvents" name="searchSuitableForEvents" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Suitable for Events</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="search_other_checkboxes_one_row_div">
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_first_column">
+                                                <input type="checkbox" ng-model="search.checkboxElevatorInBuilding" id="searchElevatorInBuilding" name="searchElevatorInBuilding" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Elevator in Building</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="search_checkbox_one_option search_advanced_checkbox_second_column">
+                                                &nbsp;     
+                                            </div>
+                                            <div class="search_checkbox_one_option">
+                                                <input type="checkbox" ng-model="search.checkboxWasher" id="searchWasher" name="searchWasher" class="search_advanced_checkbox_field" />
+                                                <span class="search_advanced_checkbox_label">Washer</span>
+                                                <div class="clearer"></div>   
+                                            </div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="clearer"></div>
+                        
+                    </div>
+                    <div class="search_advanced_panel_bottom_line">
+                        <div ng-click="showAdvancedSearchOption=false" class="search_advanced_close_div">
+                            <div class="search_advanced_close_icon"></div>
+                            <div class="search_advanced_close_text">Close</div>
+                            <div class="clearer"></div>
+                        </div>
+                    </div>
+                
+                </div>
+                
+                <div class="results_title_with_top_pagination_div">
+                    <div class="results_title_div">
+                        <div class="results_main_title_div">Miami Short Term Rentals, Nightly and Weekly Rooms, Houses and Apartments</div>
+                        <div class="results_title_with_links_div">
+                            <a href="#">Home</a> >
+                            North America >
+                            <a href="#">United States</a> >
+                            <a href="#">Florida</a> >
+                            Miami
+                            &nbsp;&nbsp; Displaying properties <strong>31-60</strong> of <strong>138 in total</strong>
+                        </div>   
+                    
+                    </div>
+                    
+                    <div class="results_pagination_top_btn_div">
+                        <div ng-class="{results_pagination_previous_big_btn: resolutionView=='regular', results_pagination_previous_regular_btn: resolutionView=='iframe'}" class="margin_right_10 floater_left"></div>
+                        <div ng-class="{results_pagination_next_big_btn: resolutionView=='regular', results_pagination_next_regular_btn: resolutionView=='iframe'}" class="margin_right_10 floater_left"></div>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="clearer"></div>
+                </div>
+                
+                
+                <div class="results_choose_view_div">
+                    <div class="sort_by_div">
+                        <div class="sort_by_label">Sort by:</div>
+                        <select ng-model="search.resultsSortBy" ng-options="sortType.id as sortType.name for sortType in sortByTypes" name="sortBySelect" id="sortBySelect" class="sort_by_select_field">  
+                        </select>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="choose_view_option_div">
+                        <div ng-click="searchResultsTabView='list_view'" ng-class="{result_list_view_btn_selected: searchResultsTabView=='list_view', result_list_view_btn: searchResultsTabView!='list_view'}" class="result_choose_view_btn"></div>
+                        <div ng-click="searchResultsTabView='box_view'" ng-class="{result_box_view_btn_selected: searchResultsTabView=='box_view', result_box_view_btn: searchResultsTabView!='box_view'}" class="result_choose_view_btn"></div>
+                        <div ng-class="{result_map_view_btn_selected: searchResultsTabView=='map_view', result_map_view_btn: searchResultsTabView!='map_view'}" class="result_choose_view_btn"></div>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="clearer"></div>
+                </div>
+                
+                
+                <div class="search_results_div">
+                    <div ng-show="searchResultsTabView=='list_view'" class="search_results_list_view_div">
+                    
+                        <div class="one_search_result_list_view">
+                            <div class="one_search_result_list_view_img_div" ng-click="openResultView()">
+                                <img src="img/search_results_temp/search_result_img1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="168" regular-min-width="212" iframe-min-height="120" iframe-min-width="151" />
+                            </div>
+                            <div class="one_search_result_list_view_info_div">
+                                <div class="one_search_result_list_view_info_div_wrapper">
+                                    <div class="one_search_result_list_view_info_left">
+                                        <div class="one_search_result_list_view_title" ng-click="openResultView()">The Tree House in Miami Beach</div>   
+                                        <div class="one_search_result_list_view_subtitle">North Beach, Miami Beach, Miami</div>   
+                                        
+                                        <div class="one_search_result_list_view_info_labels_wrapper">
+                                            <div class="one_search_result_list_view_info_labels_left_column">
+                                                <div class="one_search_result_list_view_info_label_div">Apartment</div>    
+                                                <div class="one_search_result_list_view_info_label_div">Bedrooms: <strong>2</strong></div>    
+                                                <div class="one_search_result_list_view_info_label_div">Bathrooms: <strong>2</strong></div>    
+                                            </div>
+                                            <div class="one_search_result_list_view_info_labels_right_column">
+                                                <div class="one_search_result_list_view_info_label_div">Sleeps: <strong>4-6</strong></div>  
+                                                <div class="one_search_result_list_view_info_label_div">Min-Stay: <strong>2 Nights</strong></div>  
+                                                <div class="one_search_result_list_view_info_label_div">Managed by: <strong>All Star Vacation</strong></div>  
+                                            </div>
+                                            
+                                            <div class="clearer"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="one_search_result_list_view_info_right">
+                                        <div class="one_search_result_list_view_price">US $135</div>
+                                        <div class="clearer"></div>
+                                        <div class="one_search_result_list_view_price_per_label">/night</div>
+                                        <div class="clearer"></div>
+                                        <div class="one_search_result_list_view_book_now_btn_div search_result_book_now_btn" ng-click="showPopupBookStep1=true"></div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="clearer"></div>
+                        
+                        </div>
+                        
+                        <div class="one_search_result_list_view">
+                            <div class="one_search_result_list_view_img_div" ng-click="openResultView()">
+                                <img src="img/search_results_temp/search_result_img1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="168" regular-min-width="212" iframe-min-height="120" iframe-min-width="151" />
+                            </div>
+                            <div class="one_search_result_list_view_info_div">
+                                <div class="one_search_result_list_view_info_div_wrapper">
+                                    <div class="one_search_result_list_view_info_left">
+                                        <div class="one_search_result_list_view_title" ng-click="openResultView()">The Tree House in Miami Beach</div>   
+                                        <div class="one_search_result_list_view_subtitle">North Beach, Miami Beach, Miami</div>   
+                                        
+                                        <div class="one_search_result_list_view_info_labels_wrapper">
+                                            <div class="one_search_result_list_view_info_labels_left_column">
+                                                <div class="one_search_result_list_view_info_label_div">Apartment</div>    
+                                                <div class="one_search_result_list_view_info_label_div">Bedrooms: <strong>2</strong></div>    
+                                                <div class="one_search_result_list_view_info_label_div">Bathrooms: <strong>2</strong></div>    
+                                            </div>
+                                            <div class="one_search_result_list_view_info_labels_right_column">
+                                                <div class="one_search_result_list_view_info_label_div">Sleeps: <strong>4-6</strong></div>  
+                                                <div class="one_search_result_list_view_info_label_div">Min-Stay: <strong>2 Nights</strong></div>  
+                                                <div class="one_search_result_list_view_info_label_div">Managed by: <strong>All Star Vacation</strong></div>  
+                                            </div>
+                                            
+                                            <div class="clearer"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="one_search_result_list_view_info_right">
+                                        <div class="one_search_result_list_view_price">US $135</div>
+                                        <div class="clearer"></div>
+                                        <div class="one_search_result_list_view_price_per_label">/night</div>
+                                        <div class="clearer"></div>
+                                        <div class="one_search_result_list_view_book_now_btn_div search_result_book_now_btn" ng-click="showPopupBookStep1=true"></div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="clearer"></div>
+                        
+                        </div>
+                        
+                        <div class="one_search_result_list_view">
+                            <div class="one_search_result_list_view_img_div" ng-click="openResultView()">
+                                <img src="img/search_results_temp/search_result_img1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="168" regular-min-width="212" iframe-min-height="120" iframe-min-width="151" />
+                            </div>
+                            <div class="one_search_result_list_view_info_div">
+                                <div class="one_search_result_list_view_info_div_wrapper">
+                                    <div class="one_search_result_list_view_info_left">
+                                        <div class="one_search_result_list_view_title" ng-click="openResultView()">The Tree House in Miami Beach</div>   
+                                        <div class="one_search_result_list_view_subtitle">North Beach, Miami Beach, Miami</div>   
+                                        
+                                        <div class="one_search_result_list_view_info_labels_wrapper">
+                                            <div class="one_search_result_list_view_info_labels_left_column">
+                                                <div class="one_search_result_list_view_info_label_div">Apartment</div>    
+                                                <div class="one_search_result_list_view_info_label_div">Bedrooms: <strong>2</strong></div>    
+                                                <div class="one_search_result_list_view_info_label_div">Bathrooms: <strong>2</strong></div>    
+                                            </div>
+                                            <div class="one_search_result_list_view_info_labels_right_column">
+                                                <div class="one_search_result_list_view_info_label_div">Sleeps: <strong>4-6</strong></div>  
+                                                <div class="one_search_result_list_view_info_label_div">Min-Stay: <strong>2 Nights</strong></div>  
+                                                <div class="one_search_result_list_view_info_label_div">Managed by: <strong>All Star Vacation</strong></div>  
+                                            </div>
+                                            
+                                            <div class="clearer"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="one_search_result_list_view_info_right">
+                                        <div class="one_search_result_list_view_price">US $135</div>
+                                        <div class="clearer"></div>
+                                        <div class="one_search_result_list_view_price_per_label">/night</div>
+                                        <div class="clearer"></div>
+                                        <div class="one_search_result_list_view_book_now_btn_div search_result_book_now_btn" ng-click="showPopupBookStep1=true"></div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="clearer"></div>
+                        
+                        </div>
+                        
+                        <div class="one_search_result_list_view">
+                            <div class="one_search_result_list_view_img_div" ng-click="openResultView()">
+                                <img src="img/search_results_temp/search_result_img1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="168" regular-min-width="212" iframe-min-height="120" iframe-min-width="151" />
+                            </div>
+                            <div class="one_search_result_list_view_info_div">
+                                <div class="one_search_result_list_view_info_div_wrapper">
+                                    <div class="one_search_result_list_view_info_left">
+                                        <div class="one_search_result_list_view_title" ng-click="openResultView()">The Tree House in Miami Beach</div>   
+                                        <div class="one_search_result_list_view_subtitle">North Beach, Miami Beach, Miami</div>   
+                                        
+                                        <div class="one_search_result_list_view_info_labels_wrapper">
+                                            <div class="one_search_result_list_view_info_labels_left_column">
+                                                <div class="one_search_result_list_view_info_label_div">Apartment</div>    
+                                                <div class="one_search_result_list_view_info_label_div">Bedrooms: <strong>2</strong></div>    
+                                                <div class="one_search_result_list_view_info_label_div">Bathrooms: <strong>2</strong></div>    
+                                            </div>
+                                            <div class="one_search_result_list_view_info_labels_right_column">
+                                                <div class="one_search_result_list_view_info_label_div">Sleeps: <strong>4-6</strong></div>  
+                                                <div class="one_search_result_list_view_info_label_div">Min-Stay: <strong>2 Nights</strong></div>  
+                                                <div class="one_search_result_list_view_info_label_div">Managed by: <strong>All Star Vacation</strong></div>  
+                                            </div>
+                                            
+                                            <div class="clearer"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="one_search_result_list_view_info_right">
+                                        <div class="one_search_result_list_view_price">US $135</div>
+                                        <div class="clearer"></div>
+                                        <div class="one_search_result_list_view_price_per_label">/night</div>
+                                        <div class="clearer"></div>
+                                        <div class="one_search_result_list_view_book_now_btn_div search_result_book_now_btn" ng-click="showPopupBookStep1=true"></div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="clearer"></div>
+                        
+                        </div>
+                                            
+                    </div>
+                    
+                    
+                    <div ng-show="searchResultsTabView=='box_view'" class="search_results_box_view_div">
+                        <div class="one_search_result_box_view one_search_result_box_view_left">
+                            <div class="one_search_result_box_view_wrapper">
+                                <div class="one_search_result_box_view_title" ng-click="openResultView()">The Tree House in Miami Beach</div>
+                                <div class="one_search_result_box_view_img_border_wrapper" ng-click="openResultView()">
+                                    <div class="one_search_result_box_view_img_wrapper">
+                                        <img src="img/search_results_temp/search_result_img1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="168" regular-min-width="214" iframe-min-height="118" iframe-min-width="152" />    
+                                    </div>
+                                </div>
+                                <div class="one_search_result_box_view_info_div">
+                                    <div class="one_search_result_box_view_info_heading">
+                                        <div class="one_search_result_box_view_img_number_div">
+                                            <div class="one_search_result_box_view_images_icon"></div>
+                                            <div class="one_search_result_box_view_img_number_text">6 Photos</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="one_search_result_box_view_price_div">
+                                            <div class="one_search_result_box_view_price">US <strong>$135</strong></div>
+                                            <div class="clearer"></div>
+                                            <div class="one_search_result_box_view_price_per_label">/night</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="one_search_result_box_view_info_labels">
+                                        <div class="one_search_result_box_view_info_one_label">Apartment</div>
+                                        <div class="one_search_result_box_view_info_one_label">Bedrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Bathrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Sleeps: <strong>4-6</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Min Stay: <strong>2 Nights</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Managed By: <strong>All Star Vacations</strong></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="one_search_result_box_view_book_now_btn_div search_result_book_now_btn" ng-click="showPopupBookStep1=true"></div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="one_search_result_box_view one_search_result_box_view_left">
+                            <div class="one_search_result_box_view_wrapper">
+                                <div class="one_search_result_box_view_title" ng-click="openResultView()">The Tree House in Miami Beach</div>
+                                <div class="one_search_result_box_view_img_border_wrapper" ng-click="openResultView()">
+                                    <div class="one_search_result_box_view_img_wrapper">
+                                        <img src="img/search_results_temp/search_result_img1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="168" regular-min-width="214" iframe-min-height="118" iframe-min-width="152" />    
+                                    </div>
+                                </div>
+                                <div class="one_search_result_box_view_info_div">
+                                    <div class="one_search_result_box_view_info_heading">
+                                        <div class="one_search_result_box_view_img_number_div">
+                                            <div class="one_search_result_box_view_images_icon"></div>
+                                            <div class="one_search_result_box_view_img_number_text">6 Photos</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="one_search_result_box_view_price_div">
+                                            <div class="one_search_result_box_view_price">US <strong>$135</strong></div>
+                                            <div class="clearer"></div>
+                                            <div class="one_search_result_box_view_price_per_label">/night</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="one_search_result_box_view_info_labels">
+                                        <div class="one_search_result_box_view_info_one_label">Apartment</div>
+                                        <div class="one_search_result_box_view_info_one_label">Bedrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Bathrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Sleeps: <strong>4-6</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Min Stay: <strong>2 Nights</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Managed By: <strong>All Star Vacations</strong></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="one_search_result_box_view_book_now_btn_div search_result_book_now_btn" ng-click="showPopupBookStep1=true"></div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="one_search_result_box_view one_search_result_box_view_right">
+                            <div class="one_search_result_box_view_wrapper">
+                                <div class="one_search_result_box_view_title" ng-click="openResultView()">The Tree House in Miami Beach</div>
+                                <div class="one_search_result_box_view_img_border_wrapper" ng-click="openResultView()">
+                                    <div class="one_search_result_box_view_img_wrapper">
+                                        <img src="img/search_results_temp/search_result_img1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="168" regular-min-width="214" iframe-min-height="118" iframe-min-width="152" />    
+                                    </div>
+                                </div>
+                                <div class="one_search_result_box_view_info_div">
+                                    <div class="one_search_result_box_view_info_heading">
+                                        <div class="one_search_result_box_view_img_number_div">
+                                            <div class="one_search_result_box_view_images_icon"></div>
+                                            <div class="one_search_result_box_view_img_number_text">6 Photos</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="one_search_result_box_view_price_div">
+                                            <div class="one_search_result_box_view_price">US <strong>$135</strong></div>
+                                            <div class="clearer"></div>
+                                            <div class="one_search_result_box_view_price_per_label">/night</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="one_search_result_box_view_info_labels">
+                                        <div class="one_search_result_box_view_info_one_label">Apartment</div>
+                                        <div class="one_search_result_box_view_info_one_label">Bedrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Bathrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Sleeps: <strong>4-6</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Min Stay: <strong>2 Nights</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Managed By: <strong>All Star Vacations</strong></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="one_search_result_box_view_book_now_btn_div search_result_book_now_btn" ng-click="showPopupBookStep1=true"></div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="one_search_result_box_view one_search_result_box_view_left">
+                            <div class="one_search_result_box_view_wrapper">
+                                <div class="one_search_result_box_view_title" ng-click="openResultView()">The Tree House in Miami Beach</div>
+                                <div class="one_search_result_box_view_img_border_wrapper" ng-click="openResultView()">
+                                    <div class="one_search_result_box_view_img_wrapper">
+                                        <img src="img/search_results_temp/search_result_img1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="168" regular-min-width="214" iframe-min-height="118" iframe-min-width="152" />    
+                                    </div>
+                                </div>
+                                <div class="one_search_result_box_view_info_div">
+                                    <div class="one_search_result_box_view_info_heading">
+                                        <div class="one_search_result_box_view_img_number_div">
+                                            <div class="one_search_result_box_view_images_icon"></div>
+                                            <div class="one_search_result_box_view_img_number_text">6 Photos</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="one_search_result_box_view_price_div">
+                                            <div class="one_search_result_box_view_price">US <strong>$135</strong></div>
+                                            <div class="clearer"></div>
+                                            <div class="one_search_result_box_view_price_per_label">/night</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="one_search_result_box_view_info_labels">
+                                        <div class="one_search_result_box_view_info_one_label">Apartment</div>
+                                        <div class="one_search_result_box_view_info_one_label">Bedrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Bathrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Sleeps: <strong>4-6</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Min Stay: <strong>2 Nights</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Managed By: <strong>All Star Vacations</strong></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="one_search_result_box_view_book_now_btn_div search_result_book_now_btn" ng-click="showPopupBookStep1=true"></div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="one_search_result_box_view one_search_result_box_view_left">
+                            <div class="one_search_result_box_view_wrapper">
+                                <div class="one_search_result_box_view_title" ng-click="openResultView()">The Tree House in Miami Beach</div>
+                                <div class="one_search_result_box_view_img_border_wrapper" ng-click="openResultView()">
+                                    <div class="one_search_result_box_view_img_wrapper">
+                                        <img src="img/search_results_temp/search_result_img1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="168" regular-min-width="214" iframe-min-height="118" iframe-min-width="152" />    
+                                    </div>
+                                </div>
+                                <div class="one_search_result_box_view_info_div">
+                                    <div class="one_search_result_box_view_info_heading">
+                                        <div class="one_search_result_box_view_img_number_div">
+                                            <div class="one_search_result_box_view_images_icon"></div>
+                                            <div class="one_search_result_box_view_img_number_text">6 Photos</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="one_search_result_box_view_price_div">
+                                            <div class="one_search_result_box_view_price">US <strong>$135</strong></div>
+                                            <div class="clearer"></div>
+                                            <div class="one_search_result_box_view_price_per_label">/night</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="one_search_result_box_view_info_labels">
+                                        <div class="one_search_result_box_view_info_one_label">Apartment</div>
+                                        <div class="one_search_result_box_view_info_one_label">Bedrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Bathrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Sleeps: <strong>4-6</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Min Stay: <strong>2 Nights</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Managed By: <strong>All Star Vacations</strong></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="one_search_result_box_view_book_now_btn_div search_result_book_now_btn" ng-click="showPopupBookStep1=true"></div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="one_search_result_box_view one_search_result_box_view_right">
+                            <div class="one_search_result_box_view_wrapper">
+                                <div class="one_search_result_box_view_title" ng-click="openResultView()">The Tree House in Miami Beach</div>
+                                <div class="one_search_result_box_view_img_border_wrapper" ng-click="openResultView()">
+                                    <div class="one_search_result_box_view_img_wrapper">
+                                        <img src="img/search_results_temp/search_result_img1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="168" regular-min-width="214" iframe-min-height="118" iframe-min-width="152" />    
+                                    </div>
+                                </div>
+                                <div class="one_search_result_box_view_info_div">
+                                    <div class="one_search_result_box_view_info_heading">
+                                        <div class="one_search_result_box_view_img_number_div">
+                                            <div class="one_search_result_box_view_images_icon"></div>
+                                            <div class="one_search_result_box_view_img_number_text">6 Photos</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="one_search_result_box_view_price_div">
+                                            <div class="one_search_result_box_view_price">US <strong>$135</strong></div>
+                                            <div class="clearer"></div>
+                                            <div class="one_search_result_box_view_price_per_label">/night</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="one_search_result_box_view_info_labels">
+                                        <div class="one_search_result_box_view_info_one_label">Apartment</div>
+                                        <div class="one_search_result_box_view_info_one_label">Bedrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Bathrooms: <strong>2</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Sleeps: <strong>4-6</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Min Stay: <strong>2 Nights</strong></div>
+                                        <div class="one_search_result_box_view_info_one_label">Managed By: <strong>All Star Vacations</strong></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="one_search_result_box_view_book_now_btn_div search_result_book_now_btn" ng-click="showPopupBookStep1=true"></div>
+                            </div>
+                        </div>    
+                        
+                        <div class="clearer"></div>
+                        
+                    </div>
+                </div>
+                
+                <div class="search_results_pagination_bottom_div">
+                    <div class="search_results_pagination_bottom_wrapper">
+                        <div class="results_pagination_previous_regular_btn floater_left"></div>
+                        <div class="search_results_pagination_pages_div">
+                            <a href="#">1</a>&nbsp;
+                            <a href="#">2</a>&nbsp;
+                            <a href="#">3</a>&nbsp;
+                            <a href="#">4</a>&nbsp;
+                            <a href="#">5</a>&nbsp;
+                        </div>
+                        <div class="results_pagination_next_regular_btn floater_right"></div>
+                           
+                        <div class="clearer"></div>   
+                    
+                    </div>
+                
+                </div>
+              
+                <div class="search_page_footer_text_div">
+                    <div class="search_page_footer_text_div_wrapper">  
+                        <div class="search_page_footer_text_title">Miami Vacation Rentals - It's Not Just About the Weather!</div>
+                        <p>Im ra arcimi, ut laborios aut laccate alit untio ditiur restiorum es repere et alitiur miliciet esti conseria volla dolor sitam con re omnit de cum qui odignatiis est eatem. Ut enimusdam dolore verspe con est doloris con cus.</p>
+                        <p>Ommolor sament paris dolor aliquodi quatem quid quam simus maio beriatium nonse porecessecto cumquam qui sus, tem quam ium ea samus sit latur assin consequi volo qui ditiantetur sequisti uta none nit abo. Nam is moditaturene voloratem hil idem cum et quiandunt labor aut resende nihiliquam quos eosto volupta tendem aceribus, ut liquaesed ma quos nonestium ium repudis dolese intiunt iusciis diciderae lauta qui aut alibus. <br/>
+                            Esto tota nos volorem es cullitas ipsae nam veruntisin consequiam sequis dolorrum qui dionsequibus alibus, que is eosant am ut eos non essita.</p>
+                        <p>sit dolorerument mi, ipsam id expland itiaeptat volupta epedign imaximinto omnis rehent fuga. Uci dolumet es et is atur secum quam, quiae eost la dolore et et re, quamus, ut que nam as in nam asserunt qui ipsant quae volest qui corem fugia vid min nonsedit ut et latet, eatquiaerum quam fugit, acid utem conseque laborerum, inus, sin re pro in ressequo custibu sandam ut atem fugiatio to occus con nullore nis ea vit que iminum et labore volorit a cum dolore nem lacepudit, quo cuptur, sollatis essinci liquisintur aut veles esto enesectum res et molupta tempedi undi tessi dolenis audi nus voloria simoluptatur adicatquae volupient eos ut estia dolorecto quas sum quis quunt et hil mos ex et hic tempost iassin nonse.</p>
+
+                        <p>Modio eatestis eri dolutec aectatu riorerunto quo coriatum ducimpor sam aut imus desti rae. Tem si officite possum que plabore henihictotae ipid maxime rest rest eatio ention rem in eossincid que illaut que reperer empore ipis inulpa vero tem qui qui officiti dit volecae liberissust, odipis et elendeb itatur, ut voluptatem am volendae sed quis as re sumqui reiur audit aligenis eatur ra nulpa voluptat dolo doloreiusam, expelen digendit quaeprat aliae veleni repel modi ra custioritem abo. Onsequi aspedip idempore dunt re pre mod ex explibus.<br/>
+                            Estotatur, si sapidunt, occus ea aris abo. Lori remque et quam simolorest quam velitat emporestis dunt, int, odi cus et vendae volectius evellam atio et odicimincide vendem aci renis esequias id quodis arum que volut occupta tquatem quam verum lam, sit ma que denis undici omnisci blatatem et quatate mquaere neceptatur, quo te que sam, acculla boriber orerum et volorpore optur, sa cus dolum id quae quiberum facescius que et dolest, vel ipsapeliquid erspidebit, nonsequiam es molorrum, eum nitatusae sequi corehendebis archil molorpo</p>
+                    </div>
+                </div>
+                
+            </div>
+        
+        </div>    
+    </div>  
+    <!-- Search Page END --> 
+    
+    
+    <!-- Result Page START --> 
+    <div id="resultViewPage" ng-show="showPage=='result_page'">
+        <div class="wrapper_wide">
+        
+            <div class="content_wide_width">
+            
+                <div class="header">
+                    <div class="header_main_content">
+                        <img src="img/logo.png" class="logo_img" />
+                        <div class="clearer"></div>
+                    </div>
+                </div>
+                
+                <div class="result_search_panel">
+                    <div class="result_search_panel_wrapper">
+                        <input ng-model="search.searchValue" name="resultSearchTextValue" id="resultSearchTextValue" type="text" class="search_main_text_field" placeholder="Destination, ID or Keywords. Over 495,000 Properties to Choose from."/>
+                        
+                        <input type="text" ng-model="search.checkInDate" datepicker datepicker-class="datepicker_result_search_panel" date-field-in-range="start" connected-date-field-id-array="search.arrayOfCheckOutFieldsId" connected-date-field-value="search.checkOutDate" class="search_calendar_btn search_input_btn" id="resultSearchCheckInDatepickerField" readonly placeholder="CHECK-IN" />                            
+                        <!--
+                        <div class="search_calendar_btn search_input_btn" id="resultSearchCheckInBtn" ng-click="showDatepickerPopup('resultSearchCheckInDatepickerField')" >
+                            <div class="search_input_btn_text">
+                                <span ng-show="search.checkInDate==''">CHECK-IN</span>
+                                <span ng-show="search.checkInDate!=''">{{search.checkInDate}}</span> 
+                            </div>
+                        </div>
+                        -->
+                        
+                        <input type="text" ng-model="search.checkOutDate" datepicker datepicker-class="datepicker_result_search_panel" date-field-in-range="end" connected-date-field-id-array="search.arrayOfCheckInFieldsId" connected-date-field-value="search.checkInDate" class="search_calendar_btn search_input_btn" id="resultSearchCheckOutDatepickerField" readonly placeholder="CHECK-OUT" />
+                        <!--
+                        <div class="search_calendar_btn search_input_btn" id="resultSearchCheckOutBtn" ng-click="showDatepickerPopup('resultSearchCheckOutDatepickerField')" >
+                            <div class="search_input_btn_text">
+                                <span ng-show="search.checkOutDate==''">CHECK-OUT</span>
+                                <span ng-show="search.checkOutDate!=''">{{search.checkOutDate}}</span> 
+                            </div>
+                        </div>
+                        -->                        
+                        <div class="search_btn_div" ng-show="resolutionView=='regular'"></div>
+                        <div class="clearer"></div>
+                        
+                        
+                        <div class="search_panel_text_info">
+                            <div class="search_panel_back_link" ng-click="backToSearchView()">Back to Search</div>
+                            <div class="search_panel_text_path">
+                                World > 
+                                USA > 
+                                Washington DC > 
+                                Capital Hill > 
+                                Rental 857692906
+                            </div>
+                            <div class="clearer"></div>
+                        </div>
+                        
+                        <div class="search_btn_div" ng-show="resolutionView=='iframe'"></div>
+                        <div class="clearer"></div>
+                        
+                        
+                            
+                        
+                    </div>   
+                </div>
+                
+                <div class="result_view_title">Capital Hill: Walk to Everything . Bikes Parking. We Have Two Units.</div>
+                
+                <div class="result_images_and_infos_panel">
+                    <div class="result_images_panel">
+                        <div class="result_main_image_wrapper">
+                            <img src="img/search_results_temp/result_image_1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="337" regular-min-width="566" iframe-min-height="210" iframe-min-width="276"/>
+                        <!--    <img src="img/search_results_temp/result_image_1.jpg" class="result_main_image" /> -->
+                        </div>
+                        
+                        <div class="result_thumb_images">
+                            <div class="result_small_image_wrapper thumb_image_margin_right">
+                                <img src="img/search_results_temp/result_image_1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="66" regular-min-width="110" iframe-min-height="53" iframe-min-width="89" />
+                            </div>
+                            
+                            <div class="result_small_image_wrapper thumb_image_margin_right">
+                                <img src="img/search_results_temp/result_image_1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="66" regular-min-width="110" iframe-min-height="53" iframe-min-width="89" />
+                            </div>
+                            
+                            <div class="result_small_image_wrapper" ng-class="{thumb_image_margin_right: resolutionView=='regular'}">
+                                <img src="img/search_results_temp/result_image_1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="66" regular-min-width="110" iframe-min-height="53" iframe-min-width="89" />
+                            </div>
+                            
+                            <div class="result_small_image_wrapper thumb_image_margin_right">
+                                <img src="img/search_results_temp/result_image_1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="66" regular-min-width="110" iframe-min-height="53" iframe-min-width="89" />
+                            </div>
+                            
+                            <div class="result_small_image_wrapper">
+                                <img src="img/search_results_temp/result_image_1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="66" regular-min-width="110" iframe-min-height="53" iframe-min-width="89" />
+                            </div>
+                            
+                            <div class="clearer"></div> 
+                            
+                        </div>
+                        
+                    </div>    
+                    
+                    <div class="result_book_and_info_panel">
+                        <div class="result_book_panel">
+                            <div class="result_book_panel_content_wrapper">
+                                <div class="result_price_div">$2,870</div>
+                                <div class="result_book_row_div">14 night total <span class="detail_price_book_label">Detailed Price</span></div>
+                                <div class="result_book_row_div">Your dates are <span class="available_dates_book_label">Available!</span></div>
+                                
+                                <div class="result_book_date_fields">
+                                    <input type="text" ng-model="book.checkInDate" datepicker datepicker-class="datepicker_book_panel" date-field-in-range="start" connected-date-field-id-array="book.arrayOfCheckOutFieldsId" connected-date-field-value="book.checkOutDate" class="result_book_date_input_field floater_left" id="bookCheckInDatepickerField" readonly />                            
+                                    <input type="text" ng-model="book.checkOutDate" datepicker datepicker-class="datepicker_book_panel" date-field-in-range="end" connected-date-field-id-array="book.arrayOfCheckInFieldsId" connected-date-field-value="book.checkInDate" class="result_book_date_input_field floater_right" id="bookCheckOutDatepickerField" readonly />  
+                                    <div class="clearer"></div>                           
+                                </div>
+                                
+                                <div class="result_book_it_now_btn result_book_panel_btn" ng-click="showPopupBookStep1=true" >Book it Now</div>
+                                <div class="result_email_owner_btn result_book_panel_btn">
+                                    <div class="result_email_owner_icon_and_text" ng-click="showPopupContact=true">Email Owner</div>
+                                </div> 
+                            </div>
+                        </div>
+                        
+                        <div class="result_rating_reviews_row">
+                            <div class="result_rating_stars_div">
+                                <div class="result_rating_star_img"></div>
+                                <div class="result_rating_star_img"></div>
+                                <div class="result_rating_star_img"></div>
+                                <div class="result_rating_star_img"></div>
+                                <div class="result_rating_star_img"></div>
+                                <div class="clearer"></div>
+                            </div>  
+                            <div class="result_reviews_text">18 Reviews</div>    
+                            <div class="clearer"></div>    
+                        </div>
+                        
+                        <div class="result_info_panel">
+                            <div class="result_info_one_row result_info_odd_row">
+                                <div class="result_info_label">Sleeps</div>
+                                <div class="result_info_value">6</div>
+                                <div class="clearer"></div>
+                            </div>
+                            
+                            <div class="result_info_one_row">
+                                <div class="result_info_label">Bedrooms</div>
+                                <div class="result_info_value">2</div>
+                                <div class="clearer"></div>
+                            </div>
+                            
+                            <div class="result_info_one_row result_info_odd_row">
+                                <div class="result_info_label">Bathrooms</div>
+                                <div class="result_info_value">1</div>
+                                <div class="clearer"></div>
+                            </div>
+                            
+                            <div class="result_info_one_row">
+                                <div class="result_info_label">Property Type</div>
+                                <div class="result_info_value">apartment</div>
+                                <div class="clearer"></div>
+                            </div>
+                            
+                            <div class="result_info_one_row result_info_odd_row">
+                                <div class="result_info_label">Minimum Stay</div>
+                                <div class="result_info_value">3 nights</div>
+                                <div class="clearer"></div>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="clearer"></div>    
+                
+                </div>
+                
+              
+                <div class="result_tabs_panel">
+                    <div class="result_tabs_header">     
+                        <div ng-click="resultViewSelectedTab='description_tab'" ng-class="{result_tab_selected_btn: resultViewSelectedTab=='description_tab', result_tab_not_selected_btn: resultViewSelectedTab!='description_tab'}" class="result_tab_description result_tab_btn">Description</div>
+                        <div class="result_tab_separator"></div>
+                        <div ng-click="resultViewSelectedTab='map_tab'" ng-class="{result_tab_selected_btn: resultViewSelectedTab=='map_tab', result_tab_not_selected_btn: resultViewSelectedTab!='map_tab'}" class="result_tab_map result_tab_btn result_tab_not_selected_btn">Map</div>
+                        <div class="result_tab_separator"></div>
+                        <div ng-click="resultViewSelectedTab='rates_tab'" ng-class="{result_tab_selected_btn: resultViewSelectedTab=='rates_tab', result_tab_not_selected_btn: resultViewSelectedTab!='rates_tab'}" class="result_tab_rates result_tab_btn result_tab_not_selected_btn">Rates & Availability</div>
+                        <div class="result_tab_right_fill_bottom_border"></div>
+                        <div class="clearer"></div>
+                    
+                    </div>
+                    
+                    <div class="result_tabs_content">
+                        <div ng-show="resultViewSelectedTab=='description_tab'" class="result_tabs_content_description"><p>Drionemo luptatem eaquatur maio berecab orporem rae rem volorep uditem cuptatem arion et untorehent quatus aut optasin ullorro mo molenet pre es simporem vero cusam eat.</p> 
+                            <p>Litae nonse officipsum et labo. Ecaborit et ut aut la velique vero tem re num ium labor sinciatio dolut lia destrunt ent eliquas ero occus volor a ant omnitas pident, te sequam ius, sequas dolume dolest ullandem ex et, atem intotatati non nihiciis eatem quaestisciet ea dolupta quam nobit vernam, serfero runtis et eaquibus, samet ipid quia debis secese nis repre pelit, ulleceped maio. Ut ma dolorepe et voluptat laccum qui cusda et untem si sequi corat.</p> 
+                            <p>Ure, conest, et ex eum entis net faccus eicitatiur assite vel enis venihitem sitiume pero verspero magniminctas dolutem quostium est ist, id quam, ipic tem verepud itatiis venis quo cuptatibus sit, consectumque nosae eos ped moleniendam, veniasi mpercipsam et rehent, officiduntur suntemos eium volupta temqui quideriae ratem con custium fugitiisim as peratis est eaturi to everis as a plabori busandia animini squiam, seroribearum qui numquo cum quis apita dolore non natemped quatus quam delique nos seque nis volutat vel molupiet vendaes ediosam quibust latem quodicte rem et rest arum ne consedis explandus pa nis magnit quas posam adici te maio. Uptiis eate omni rerum et, quae siti blab imporia natia voluptas esequibus sit.</p>
+                        </div>
+                        
+                        <div ng-show="resultViewSelectedTab=='map_tab'" class="result_tabs_content_description"><p>Mrionemo luptatem eaquatur maio berecab orporem rae rem volorep uditem cuptatem arion et untorehent quatus aut optasin ullorro mo molenet pre es simporem vero cusam eat.</p> 
+                            <p>Litae nonse officipsum et labo. Ecaborit et ut aut la velique vero tem re num ium labor sinciatio dolut lia destrunt ent eliquas ero occus volor a ant omnitas pident, te sequam ius, sequas dolume dolest ullandem ex et, atem intotatati non nihiciis eatem quaestisciet ea dolupta quam nobit vernam, serfero runtis et eaquibus, samet ipid quia debis secese nis repre pelit, ulleceped maio. Ut ma dolorepe et voluptat laccum qui cusda et untem si sequi corat.</p> 
+                            <p>Ure, conest, et ex eum entis net faccus eicitatiur assite vel enis venihitem sitiume pero verspero magniminctas dolutem quostium est ist, id quam, ipic tem verepud itatiis venis quo cuptatibus sit, consectumque nosae eos ped moleniendam, veniasi mpercipsam et rehent, officiduntur suntemos eium volupta temqui quideriae ratem con custium fugitiisim as peratis est eaturi to everis as a plabori busandia animini squiam, seroribearum qui numquo cum quis apita dolore non natemped quatus quam delique nos seque nis volutat vel molupiet vendaes ediosam quibust latem quodicte rem et rest arum ne consedis explandus pa nis magnit quas posam adici te maio. Uptiis eate omni rerum et, quae siti blab imporia natia voluptas esequibus sit.</p>
+                        </div>
+                        
+                        <div ng-show="resultViewSelectedTab=='rates_tab'" class="result_tabs_content_rates">
+                        
+                            <div class="tab_rates_availability_calendar_div">
+                                <div id="datesAvailabilityCalendar" datepicker-inline book-check-in-date='book.checkInDate' book-check-out-date='book.checkOutDate' ></div>
+                                <div class="availability_calendar_legend_row">
+                                    <div class="availability_calendar_update_div">
+                                        <div class="availability_calendar_legend_label">Update:</div>
+                                        <div class="availability_calendar_update_value">Dec. 10, 2013.</div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    <div class="availability_calendar_legend_div">
+                                        <div class="availability_calendar_dates_booked_div">
+                                            <div class="availability_calendar_legend_label">Dates Booked:</div>
+                                            <div class="availability_calendar_dates_booked_icon"></div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="availability_calendar_unavailable_dates_div">
+                                            <div class="availability_calendar_legend_label">Unavailable:</div>
+                                            <div class="availability_calendar_unavailable_dates_icon"></div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        <div class="clearer"></div>
+                                    </div>
+                                    <div class="clearer"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="tab_rates_rates_div">
+                                <div class="tab_rates_rates_heading_div">
+                                    <div class="tab_rates_rental_info_div">
+                                        <div class="tab_rates_rental_info_row"><strong>Rental Basic:</strong> Per property</div>    
+                                        <div class="tab_rates_rental_info_row"><strong>Rental Rates Quoted in:</strong> USD</div>    
+                                    </div>
+                                    
+                                    <div class="tab_rates_approximate_equivalent_div">
+                                        <div class="tab_rates_approximate_equivalent_label">Approximate equivalent in</div> 
+                                        <select ng-model="resultView.approximateEquivalentCurrency" ng-options="currency.id as currency.name for currency in approximateEquivalentCurrencyList" name="resultApproximateEquivalentCurrency" id="resultApproximateEquivalentCurrency" class="tab_rates_approximate_equivalent_select">
+                                            <option value="">Select Currency</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                </div>  
+                                
+                                <table class="tab_rates_rates_table">
+                                    <thead>
+                                        <tr class="heading_row"> 
+                                            <td class="first_column">Rate Period</td>
+                                            <td>Nightly</td>
+                                            <td>Weekend Night</td>
+                                            <td>Weekly</td>
+                                            <td>Monthly*</td>
+                                            <td>Event Minimum Stay</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="data_row">
+                                            <td class="first_column"><span>Sept. - Oct 13</span></td>
+                                            <td><span>$200</span></td>
+                                            <td><span></span></td>
+                                            <td><span>$1200</span></td>
+                                            <td><span>$5000</span></td>
+                                            <td class="last_column">2 nights</td>
+                                        </tr>
+                                        
+                                        <tr class="data_row">
+                                            <td class="first_column"><span>Sept. - Oct 13</span></td>
+                                            <td><span>$200</span></td>
+                                            <td><span></span></td>
+                                            <td><span>$1200</span></td>
+                                            <td><span>$5000</span></td>
+                                            <td class="last_column">2 nights</td>
+                                        </tr>
+                                        
+                                        <tr class="data_row">
+                                            <td class="first_column"><span>Sept. - Oct 13</span></td>
+                                            <td><span>$200</span></td>
+                                            <td><span></span></td>
+                                            <td><span>$1200</span></td>
+                                            <td><span>$5000</span></td>
+                                            <td class="last_column">2 nights</td>
+                                        </tr>
+                                        
+                                        <tr class="data_row">
+                                            <td class="first_column"><span>Sept. - Oct 13</span></td>
+                                            <td><span>$200</span></td>
+                                            <td><span></span></td>
+                                            <td><span>$1200</span></td>
+                                            <td><span>$5000</span></td>
+                                            <td class="last_column">2 nights</td>
+                                        </tr>
+                                    </tbody>
+                                </table> 
+                                
+                                <div class="rates_table_additional_info_div">
+                                    <div class="additional_info_text_highlight">Additional Information about rental rates</div>   
+                                    <div class="additional_info_rates_value">Rates are subject to change until reservation is confirmed</div>
+                                    <div class="additional_info_text_highlight">*Additional monthly rate. Actual rate will depend on the days of the month you stay.</div>  
+                                    <div class="additional_info_text">Payment is usually accepted in the quoted currency (USD) unless the currency and the amount is specifically agreed in advance with the owner / advertiser.</div>
+                                    
+                                    <div class="rates_cancellation_policy_title">Cancellation Policy</div>
+                                    <div class="additional_info_cancellation_policy_value">Rates are subject to change until reservation is confirmed</div>
+                                </div>
+                                 
+                            </div>
+                            
+                        
+                        </div>
+                    </div>
+                
+                    <div class="result_tab_rates_buttons_div" ng-show="resultViewSelectedTab=='rates_tab'">
+                        <div class="rates_tab_email_owner_btn rates_tab_content_btn">
+                            <div class="rates_tab_email_owner_icon_and_text" ng-click="showPopupContact=true">Email Owner</div>
+                        </div> 
+                        <div class="rates_tab_book_it_now_btn rates_tab_content_btn" ng-click="showPopupBookStep1=true" >Book it Now</div>          
+                        <div class="clearer"></div>    
+                    </div>
+                    <div class="clearer"></div>
+                </div>
+                
+                <div class="result_simillar_properties_panel">
+                    <div class="result_simillar_properties_panel_content">
+                        <div class="result_simillar_properties_title">Similar Properties</div>
+                        
+                        <div class="one_simillar_properties_div one_simillar_properties_margin_right">
+                            <div class="one_simillar_properties_img_wrapper">
+                                <img src="img/search_results_temp/result_image_1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="71" regular-min-width="71" iframe-min-height="71" iframe-min-width="71" />
+                            </div>
+                            <div class="one_simillar_properties_text_div">
+                                <div class="one_simillar_properties_regular_text">Beautiful house at Acapulco Bay</div>
+                                <div class="one_simillar_properties_highlight_text">From US $349/night</div>
+                            </div>
+                            <div class="clearer"></div>
+                        </div>
+                        
+                        <div ng-show="resolutionView=='regular'" class="result_simillar_properties_separator">&nbsp;</div>
+                        
+                        <div class="one_simillar_properties_div ">
+                            <div class="one_simillar_properties_img_wrapper">
+                                <img src="img/search_results_temp/result_image_1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="71" regular-min-width="71" iframe-min-height="71" iframe-min-width="71" />
+                            </div>
+                            <div class="one_simillar_properties_text_div">
+                                <div class="one_simillar_properties_regular_text">Beautiful house at Acapulco Bay</div>
+                                <div class="one_simillar_properties_highlight_text">From US $349/night</div>
+                            </div>
+                            <div class="clearer"></div>
+                        </div>
+                        
+                        <div ng-show="resolutionView=='iframe'" class="clearer"></div>
+                        
+                        <div class="result_simillar_properties_separator">&nbsp;</div>
+                        
+                        <div class="one_simillar_properties_div">
+                            <div class="one_simillar_properties_img_wrapper">
+                                <img src="img/search_results_temp/result_image_1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="71" regular-min-width="71" iframe-min-height="71" iframe-min-width="71" />
+                            </div>
+                            <div class="one_simillar_properties_text_div">
+                                <div class="one_simillar_properties_regular_text">Beautiful house at Acapulco Bay</div>
+                                <div class="one_simillar_properties_highlight_text">From US $349/night</div>
+                            </div>
+                            <div class="clearer"></div>
+                        </div>
+                        
+                        
+                        <div class="clearer"></div>
+                                             
+                    </div>
+                </div>
+                
+                <div class="clearer"></div> 
+                
+            </div>
+        
+        </div>
+        
+    </div>
+    <!-- Result Page END -->
+    
+    
+    
+    
+    
+    
+    <!-- POPUP Contact Owner START -->
+    
+    <div class="popup_window_search_result" id="popup_window_contact_owner" ng-show="showPopupContact">
+        <div class="popup_window_search_result_back"></div>
+        
+        <div class="popup_window_contact_owner_wrapper">
+            <div class="popup_window_heading">
+                <div class="popup_heading_text">Contact the Owner</div>
+            </div>
+            
+            <form name="popupContactForm" class="search_result_form" novalidate>
+                <div class="popup_contact_owner_content_wrapper" ng-class="{true: 'error_validation'}[submittedContactForm && !popupContactForm.$valid]">
+                    <div class="popup_content_title">Tell the owner when you would like to travel</div>
+                    <div class="popup_content_field_row">
+                        <input type="text" required ng-model="book.checkInDate" datepicker datepicker-class="datepicker_popup_window" date-field-in-range="start" connected-date-field-id-array="book.arrayOfCheckOutFieldsId" connected-date-field-value="book.checkOutDate" class="popup_window_input_field popup_window_datepicker_field floater_left" id="popupContactCheckInDatepickerField" placeholder="Arrival" readonly />                            
+                        <input type="text" required ng-model="book.checkOutDate" datepicker datepicker-class="datepicker_popup_window" date-field-in-range="end" connected-date-field-id-array="book.arrayOfCheckInFieldsId" connected-date-field-value="book.checkInDate" class="popup_window_input_field popup_window_datepicker_field floater_right" id="popupContactCheckOutDatepickerField" placeholder="Departure" readonly />  
+                        <div class="clearer"></div>                                                                                                               
+                    </div>
+                    
+                    <div class="popup_content_field_row">
+                        <input type="checkbox" ng-model="contact.flexibleDepartureDates" id="contactFlexibleDepartureDates" name="contactFlexibleDepartureDates" class="departure_dates_checkbox" />
+                        <div class="popup_contact_flexible_departure_dates_text">My departure dates are flexible</div>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="popup_content_field_row">
+                        <input required ng-model="contact.firstName" name="contactFirstName" id="contactFirstName" type="text" class="popup_window_input_field floater_left" placeholder="First Name*" /> 
+                        <input required ng-model="contact.lastName" name="contactLastName" id="contactLastName" type="text" class="popup_window_input_field floater_right" placeholder="Last Name*"  /> 
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="popup_content_field_row">
+                        <input required ng-model="contact.emailAddress" name="contactEmailAddress" id="contactEmailAddress" type="email" class="popup_window_input_field floater_left" placeholder="Email Address*" /> 
+                        <input required ng-model="contact.phoneNumber" name="contactPhoneNumber" id="contactPhoneNumber" type="text" class="popup_window_input_field floater_right" placeholder="Phone Number*"  /> 
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="popup_content_field_row">
+                        <select ng-model="contact.country" ng-options="country.id as country.name for country in contactCountryList" name="contactCountry" id="contactCountry" class="popup_window_select_field floater_left">
+                        </select>
+                        <div class="contact_pearson_number_div">
+                            <div class="contact_pearson_number_label">Adults</div>
+                            <select ng-model="contact.adultsNumber" ng-options="numberAdults for numberAdults in adultsNumberList" name="contactAdultsNumber" id="contactAdultsNumber" class="person_number_select_field">
+                            </select>
+                            
+                            <div class="contact_pearson_number_label">Children</div>
+                            <select ng-model="contact.childrenNumber" ng-options="numberChildren for numberChildren in childrenNumberList" name="contactChildrenNumber" id="contactChildrenNumber" class="person_number_select_field">
+                            </select>
+                            
+                            <div class="clearer"></div>
+                        </div>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="popup_content_field_row">
+                        <textarea ng-model="contact.messageText" class="popup_window_textarea" placeholder="Message to Owner"></textarea>
+                    </div>
+                    
+                    <div class="popup_contact_terms_text">
+                        By clicking "Send Email" you are agreeing to our <a href="#">Terms & Conditions</a>
+                    </div>
+                    
+                    <div class="popup_dashed_line"></div>
+                    
+                    <div class="popup_contact_buttons_div">
+                        <div class="popup_contact_buttons_wrapper">
+                            <div class="popup_close_btn" ng-click="showPopupContact=false">Close</div>
+                            <div class="popup_submit_btn" ng-click="contactFormSubmit()">Send Email</div>
+                            <div class="clearer"></div>
+                        </div>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    
+                </div>
+                
+            </form>
+        </div>  
+    </div>
+    <!-- POPUP Contact Owner END -->
+    
+    
+    <!-- POPUP Book Step1 START -->
+    
+    <div class="popup_window_search_result" id="popup_window_book_step1" ng-show="showPopupBookStep1">
+        <div class="popup_window_search_result_back"></div>
+        
+        <div class="popup_book_step1_wrapper">
+            <div class="popup_window_heading">
+                <div class="popup_heading_text">Tell us about your trip, then book it.</div>
+            </div>
+            
+            <form name="popupBookStep1Form" class="search_result_form" novalidate>
+                <div class="popup_book_step1_content_wrapper" ng-class="{true: 'error_validation'}[submittedBookStep1Form && !popupBookStep1Form.$valid]">
+                    <div class="popup_content_title">Your dates are <span class="popup_content_title_highlight">Available!</span></div>
+                    <div class="popup_book_step1_dates_row">
+                        <input type="text" required ng-model="book.checkInDate" datepicker datepicker-class="datepicker_popup_window" date-field-in-range="start" connected-date-field-id-array="book.arrayOfCheckOutFieldsId" connected-date-field-value="book.checkOutDate" class="popup_window_grey_input_field popup_window_datepicker_field floater_left" id="popupBookCheckInDatepickerField" placeholder="Arrival" readonly />                            
+                        <input type="text" required ng-model="book.checkOutDate" datepicker datepicker-class="datepicker_popup_window" date-field-in-range="end" connected-date-field-id-array="book.arrayOfCheckInFieldsId" connected-date-field-value="book.checkInDate" class="popup_window_grey_input_field popup_window_datepicker_field floater_right" id="popupBookCheckOutDatepickerField" placeholder="Departure" readonly />  
+                        <div class="clearer"></div>                                                                                                               
+                    </div>
+                     
+                    <div class="book_person_number_row">
+                        <div class="book_person_number_label">Adults</div>
+                        <select ng-model="book.adultsNumber" ng-options="numberAdults for numberAdults in adultsNumberList" name="bookAdultsNumber" id="bookAdultsNumber" class="person_number_select_field">
+                        </select>
+                        
+                        <div class="book_person_number_label">Children</div>
+                        <select ng-model="book.childrenNumber" ng-options="numberChildren for numberChildren in childrenNumberList" name="bookChildrenNumber" id="bookChildrenNumber" class="person_number_select_field">
+                        </select>
+                        
+                        <input type="checkbox" ng-model="book.pets" id="bookPets" name="bookPets" class="pets_checkbox" />
+                        <div class="book_person_number_label">Pets</div>
+
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    
+                                        
+                    <div class="popup_dashed_line"></div>
+                    
+                    <div class="popup_book1_table_regular_row">
+                        <div class="popup_book1_table_label">Rental Amount (7 nights)</div>
+                        <div class="popup_book1_table_value">$859.95</div>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="popup_dashed_line"></div>
+                    
+                    <div class="popup_book1_table_regular_row">
+                        <div class="popup_book1_table_label">Tax</div>
+                        <div class="popup_book1_table_value">$0.0</div>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="popup_dashed_line"></div>
+                    
+                    <div class="popup_book1_table_regular_row">
+                        <div class="popup_book1_table_label">Refundable Damage Deposit</div>
+                        <div class="popup_book1_table_value">$400.0</div>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="popup_book1_table_totals_div">
+                        <div class="popup_book1_table_totals_main_row">
+                            <div class="popup_book1_table_totals_label floater_left">Rental Amount</div>
+                            <div class="popup_book1_table_totals_value floater_right">$1,259.95</div>
+                            <div class="clearer"></div>
+                        </div>
+                        <div class="popup_book1_table_totals_second_row">Total Includes $400 Damage Deposit</div>
+                    </div>
+                    
+                    <div class="popup_book1_table_regular_row">
+                        <div class="popup_book1_table_label">Payment 1 Due: At time of booking approval</div>
+                        <div class="popup_book1_table_value">$1,259.95</div>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="popup_dashed_line"></div>   
+
+                    <div class="popup_book1_table_cancellation_row">
+                        <div class="popup_book1_table_label">Cancellation</div>
+                        <div class="popup_book1_table_value">No refunds for cancellation made after payment is made.</div>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    <div class="popup_contact_buttons_div">
+                        <div class="popup_contact_buttons_wrapper">
+                            <div class="popup_close_btn" ng-click="showPopupBookStep1=false">Close</div>
+                            <div class="popup_submit_btn" ng-click="bookStep1FormSubmit()">Continue Booking</div>
+                            <div class="clearer"></div>
+                        </div>
+                        <div class="clearer"></div>
+                    </div>
+                    
+                    
+                </div>
+                
+            </form>
+        </div>  
+    </div>
+    <!-- POPUP Book Step1 END -->
+    
+    
+    
+    <!-- POPUP Book Step2 START-->
+    
+    <div class="popup_window_search_result_payment" id="popup_window_book_step2" ng-show="showPopupBookStep2">
+        <div class="popup_window_search_result_back"></div>
+        
+        <div class="popup_book_step2_wrapper">
+            <div class="popup_window_heading">
+                <div class="popup_heading_text">Request a Reservation</div>
+            </div>
+            
+            <div class="popup_book_step2_content_wrapper">
+            
+                <div class="book_step2_info_img_div">
+                    <div class="book_step2_img_div">
+                        <div class="book_step2_img_wrapper">
+                            <img src="img/search_results_temp/result_image_1.jpg" set-image-size resolution-view="resolutionView" regular-min-height="90" regular-min-width="140" iframe-min-height="90" iframe-min-width="140" />
+                        </div>    
+                    </div>  
+                    <div class="book_step2_head_info_div">
+                        <div class="book_step2_head_info_title"><strong>Paris in Buenos Aires:</strong> Luxury 2 bedroom Apartment in the heart of Recoleta.</div>
+                        <div class="book_step2_head_info_text">
+                            <div class="book_step2_head_info_text_row">
+                                Arrival Date: <span class="book_step2_head_info_value margin_right_10">{{book.checkInDate}}</span>
+                                Departure Date: <span class="book_step2_head_info_value">{{book.checkOutDate}}</span> 
+                            </div>
+                            <div class="book_step2_head_info_text_row">Travelers: <span class="book_step2_head_info_value">{{book.adultsNumber}} Adult(s), ({{book.childrenNumber}}) Children </span></div>
+                            <div class="book_step2_head_info_text_row book_step2_return_link" ng-click="bookStep2FormBackToEdit()">Edit Travel Details</div>
+                        </div>
+                    </div>
+                    <div class="clearer"></div>   
+                </div>
+            
+                <form name="popupBookStep2Form" class="search_result_form search_result_checkbox_highlight_form" novalidate>
+                        
+                    <div class="book_step2_form_wrapper" ng-class="{true: 'error_validation'}[submittedBookStep2Form && !popupBookStep2Form.$valid]">
+                        <div class="book_step2_form_heading_div book_step2_form_content_wrapper">
+                            <div class="book_step2_form_heading_title book_step2_field_text_wrapper">How it Works</div>
+                            <div class="popup_dashed_line "></div>
+                            <div class="book_step2_form_heading_text book_step2_field_text_wrapper">Submit your booking request below. The owner will then have 24 hours to accept your reservation request at which time your card will be charged.</div>
+                        </div>
+                    
+                        <div class="book_step2_form_subtitle_div">
+                            <div class="subtitle_text">Guest Information</div>
+                        </div>
+                    
+                        <div class="book_step2_form_content_section book_step2_form_content_wrapper book_step2_form_input_fields_section">
+                            <div class="book_step2_field_text_wrapper margin_bottom_10">
+                                <input required ng-model="book.firstName" name="bookFirstName" id="bookFirstName" type="text" class="popup_window_custom_input_field input_xlarge floater_left" placeholder="First Name*" /> 
+                                <input required ng-model="book.lastName" name="bookLastName" id="bookLastName" type="text" class="popup_window_custom_input_field input_xlarge floater_right" placeholder="Last Name*"  /> 
+                                <div class="clearer"></div>     
+                                
+                            </div>  
+                            
+                            <div class="book_step2_field_text_wrapper">
+                                <input required ng-model="book.emailAddress" name="bookEmailAddress" id="bookEmailAddress" type="email" class="popup_window_custom_input_field input_xlarge floater_left" placeholder="Email Address*" /> 
+                                <input required ng-model="book.phoneNumber" name="bookPhoneNumber" id="bookPhoneNumber" type="text" class="popup_window_custom_input_field input_xlarge floater_right" placeholder="Phone Number*"  /> 
+                                <div class="clearer"></div>
+                            </div>  
+                        </div>
+                        
+                        <div class="book_step2_form_subtitle_div">
+                            <div class="subtitle_text floater_left">Add a Message to Owner </div> 
+                            <div class="floater_left book_step2_form_subtitle_additional_text">(optional)</div>
+                            <div class="clearer"></div> 
+                            <div class="textarea_character_left">{{3000 - book.messageText.length}} characters left</div>
+                            <div class="clearer"></div> 
+                        </div>
+                        
+                        <div class="book_step2_form_content_section book_step2_form_content_wrapper book_step2_form_input_fields_section">
+                            <div class="book_step2_field_text_wrapper">
+                                <textarea ng-model="book.messageText" maxlength="3000" class="popup_window_textarea" placeholder="Tell the owner more about your travel plans including who you are traveling with and the purpose of your trip. You can also ask any questions you might have."></textarea>    
+                            </div>  
+                        </div>
+                        
+                        <div class="book_step2_form_subtitle_div">
+                            <div class="subtitle_text">Protection Options from BookingPal</div>
+                        </div>
+                        
+                        <div class="book_step2_form_content_section book_step2_form_content_wrapper ">
+                            <!--
+                            <div class="book_step2_content_table_row">
+                                <div class="book_step2_table_row_title">
+                                    <div class="book_step2_table_row_title_label"><i>Before your trip</i>&nbsp;&nbsp;<strong>- Cancellation Protection</strong></div>
+                                    <div class="book_step2_table_row_title_value">$0.00</div>
+                                    <div class="popup_dashed_line"></div>
+                                    <div class="clearer"></div>
+                                </div>  
+                                
+                                <div class="book_step2_table_row_main_content">
+                                    <div class="book_step2_content_table_row_info_div">
+                                        <strong>Protect Your Investment Should You Have to Cancel</strong>
+                                        <div class="show_details_link">Show Details</div>
+                                    </div>
+                                    <div class="book_step2_content_table_row_input_div">
+                                        <div class="book_step2_content_table_row_input_left_option">
+                                            <input type="radio" ng-model="book.protectInvestement" name="bookProtectInvestement" value="true" class="book_step2_radio_btn"> 
+                                            <div class="book_step2_content_table_row_input_label">Protect</div>
+                                            <input ng-required="book.protectInvestement=='true'" ng-model="book.protectInvestementValue" name="bookProtectInvestementValue" id="bookProtectInvestementValue" type="text" class="popup_window_custom_input_field input_protect_investment" /> 
+                                            <div class="book_step2_content_table_row_input_label">for $39.95</div>
+                                            
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="book_step2_content_table_row_input_right_option">
+                                            <input type="radio" ng-model="book.protectInvestement" name="bookProtectInvestement" value="false" class="book_step2_radio_btn"> 
+                                            <div class="book_step2_content_table_row_input_label">No Thanks</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                </div>
+                            </div> 
+                            
+                            <div class="popup_regular_line"></div>
+                            
+                            <div class="book_step2_content_table_row">
+                                <div class="book_step2_table_row_title">
+                                    <div class="book_step2_table_row_title_label"><i>On Arrival</i>&nbsp;&nbsp;<strong>- Carefree Rental Guarantee</strong></div>
+                                    <div class="book_step2_table_row_title_value">$0.00</div>
+                                    <div class="popup_dashed_line"></div>
+                                    <div class="clearer"></div>
+                                </div>  
+                                
+                                <div class="book_step2_table_row_main_content">
+                                    <div class="book_step2_content_table_row_info_div">
+                                        <strong>Protect Your Payment if the Rental is not as Described</strong>
+                                        <div class="show_details_link">Show Details</div>
+                                    </div>
+                                    <div class="book_step2_content_table_row_input_div">
+                                        <div class="book_step2_content_table_row_input_left_option">
+                                            <input type="radio" ng-model="book.protectPayment" name="bookProtectPayment" value="true" class="book_step2_radio_btn"> 
+                                            <div class="book_step2_content_table_row_input_label">Protect my payment for $39.00</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="book_step2_content_table_row_input_right_option">
+                                            <input type="radio" ng-model="book.protectPayment" name="bookProtectPayment" value="false" class="book_step2_radio_btn"> 
+                                            <div class="book_step2_content_table_row_input_label">No Thanks</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                </div>
+                            </div> 
+                            
+                            <div class="popup_regular_line"></div>
+                            -->
+                            
+                            <div class="book_step2_content_table_row">
+                                <div class="book_step2_table_row_title">
+                                    <div class="book_step2_table_row_title_label"><i>During Your Stay</i>&nbsp;&nbsp;<strong>- Damage Protection</strong></div>
+                                    <div class="book_step2_table_row_title_value">$0.00</div>
+                                    <div class="popup_dashed_line"></div>
+                                    <div class="clearer"></div>
+                                </div>  
+                                
+                                <div class="book_step2_table_row_main_content">
+                                    <div class="book_step2_content_table_row_info_div">
+                                        <strong>Protect Against Damage to the Rental</strong>
+                                        <div class="show_details_link">Show Details</div>
+                                    </div>
+                                    <div class="book_step2_content_table_row_input_div">
+                                        <div class="book_step2_content_table_row_input_left_option">
+                                            <input type="radio" ng-model="book.protectDamage" name="bookProtectDamage" value="true" class="book_step2_radio_btn"> 
+                                            <select ng-model="book.protectDamageValue" ng-required="book.protectDamage=='true'" ng-options="damage.id as damage.name for damage in protectDamageValueList" name="bookProtectDamageValue" id="bookProtectDamageValue" class="popup_window_custom_select_field input_protect_damage">
+                                                <option value="">Select Coverage Amount</option>
+                                            </select>                                            
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="book_step2_content_table_row_input_right_option">
+                                            <input type="radio" ng-model="book.protectDamage" name="bookProtectDamage" value="false" class="book_step2_radio_btn"> 
+                                            <div class="book_step2_content_table_row_input_label">No Thanks</div>
+                                            <div class="clearer"></div>
+                                        </div>
+                                        
+                                        <div class="clearer"></div>
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                </div>
+                            </div> 
+ 
+                        </div>
+                        
+                        <div class="book_step2_form_subtitle_div">
+                            <div class="subtitle_text">Payment Schedule</div>
+                        </div>
+                        
+                        
+                        <div class="book_step2_form_payment_heading">
+                            <div class="payment_heading_first_row">
+                                <div class="payment_heading_label">Payment Due: At time of Owner Approval</div>
+                                <input ng-model="book.paymentTotalValue" readonly name="bookPaymentTotalValue" id="bookPaymentTotalValue" type="text" class="payment_total_input_field" /> 
+                                <div class="clearer"></div>
+                            </div>
+                            <div class="payment_heading_second_row">
+                                <div class="payment_heading_label">Payment Total <span class="show_details_link">Show Details</span>:</div>
+                                <div class="payment_heading_value_text">$1,259.95</div>
+                                <div class="clearer"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="book_step2_form_payment_content">
+                            <div class="book_step2_form_payment_content_heading">
+                                <div class="book_step2_form_payment_content_heading_text">Credit Card</div>
+                                <div class="book_step2_form_payment_content_card_img"><img src="img/result_view/payment_card_allowed.png"></div>
+                                <div class="clearer"></div>
+                            </div>
+                            <div class="book_step2_form_content_section book_step2_form_payment_input_fields_section">
+                            
+                                <div class="payment_input_row">
+                                    <div class="payment_input_row_field floater_left margin_right_7">
+                                        <div class="payment_input_label">First Name</div>
+                                        <input required ng-model="book.paymentFirstName" name="bookPaymentFirstName" id="bookPaymentFirstName" type="text" class="popup_window_custom_input_field input_large "/> 
+                                    </div>
+                                    
+                                    <div class="payment_input_row_field floater_left margin_right_7">
+                                        <div class="payment_input_label">Last Name</div>
+                                        <input required ng-model="book.paymentLastName" name="bookPaymentLastName" id="bookPaymentLastName" type="text" class="popup_window_custom_input_field input_large "/> 
+                                    </div>
+                                    
+                                    <div class="payment_input_row_field floater_right">
+                                        <div class="payment_input_label">Card Type</div>
+                                        <select ng-model="book.paymentCardType" ng-options="cardType.id as cardType.name for cardType in paymentCardTypeList" name="bookPaymentCardType" id="bookPaymentCardType" class="popup_window_custom_select_field input_medium">
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                </div> 
+                                
+                                <div class="payment_input_row">
+                                    <div class="payment_input_row_field floater_left">
+                                        <div class="payment_input_label">Address</div>
+                                        <input required ng-model="book.paymentAddress" name="bookPaymentAddress" id="bookPaymentAddress" type="text" class="popup_window_custom_input_field input_xxlarge "/> 
+                                    </div>
+                                    
+                                    <div class="payment_input_row_field floater_right">
+                                        <div class="payment_input_label">Card Number</div>
+                                        <input required ng-model="book.paymentCardNumber" name="bookPaymentCardNumber" id="bookPaymentCardNumber" type="text" class="popup_window_custom_input_field input_xxlarge "/> 
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                </div>
+                                
+                                <div class="payment_input_row">
+                                    <div class="payment_input_row_field floater_left margin_right_7">
+                                        <div class="payment_input_label">Country</div>
+                                        <select ng-model="book.paymentCountry" ng-options="country.id as country.name for country in countriesList" name="bookPaymentCountry" id="bookPaymentCountry" class="popup_window_custom_select_field input_medium">
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="payment_input_row_field floater_left margin_right_7">
+                                        <div class="payment_input_label">State</div>
+                                        <select ng-model="book.paymentState" ng-options="state.id as state.name for state in statesList" name="bookPaymentState" id="bookPaymentState" class="popup_window_custom_select_field input_medium">
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="payment_input_row_field floater_left">
+                                        <div class="payment_input_label">Expiration Date</div>
+                                        <div>
+                                            <select ng-model="book.expirationDateMonth" ng-options="expirationMonth for expirationMonth in numberRange(1,12)" name="bookExpirationDateMonth" id="bookExpirationDateMonth" class="popup_window_custom_select_field input_small margin_right_5 floater_left">
+                                            </select>
+                                            <select ng-model="book.expirationDateYear" ng-options="expirationYear for expirationYear in numberRange(2014,2024)" name="bookExpirationDateYear" id="bookExpirationDateYear" class="popup_window_custom_select_field input_small floater_left">
+                                            </select>
+                                            <div class="clearer"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                </div>
+                                
+                                <div class="payment_input_row">
+                                    <div class="payment_input_row_field floater_left margin_right_7">
+                                        <div class="payment_input_label">City</div>
+                                        <input required ng-model="book.paymentCity" name="bookPaymentCity" id="bookPaymentCity" type="text" class="popup_window_custom_input_field input_medium "/> 
+                                    </div>
+                                    
+                                    <div class="payment_input_row_field floater_left margin_right_7">
+                                        <div class="payment_input_label">Postal code</div>
+                                        <input required ng-model="book.paymentPostalCode" name="bookPaymentPostalCode" id="bookPaymentPostalCode" type="text" class="popup_window_custom_input_field input_medium "/> 
+                                    </div>
+                                    
+                                    <div class="payment_input_row_field floater_left">
+                                        <div class="payment_input_label">Security Code</div>
+                                        <input required ng-model="book.paymentSecurityCode" name="bookPaymentSecurityCode" id="bookPaymentSecurityCode" type="text" class="popup_window_custom_input_field input_medium "/> 
+                                    </div>
+                                    
+                                    <div class="clearer"></div>
+                                </div>
+                                
+                                <div class="payment_cancellation_policy_div payment_input_label">
+                                    <div>Cancellation Policy</div>
+                                    <div class="payment_cancellation_policy_second_row">No Refund</div>
+                                </div>
+                                
+                                   
+                            </div>
+                        </div>
+                         
+                         
+                        
+                        <div class="popup_contact_buttons_div">
+                            <div class="popup_book_step2_agree_with_terms_div">
+                                <input required type="checkbox" ng-model="book.agreeWithTerms" id="bookAgreeWithTerms" name="bookAgreeWithTerms" class="floater_left" />
+                                <div class="popup_book_step2_agree_with_terms_label">
+                                    I read and agree with the 
+                                    <span class="terms_link" ng-click="showRentalAgreementPopupClick()">Rental Agreement</span>, 
+                                    <span class="terms_link" ng-click="showPrivacyPopupClick()">Privacy Policy and Terms & Conditions</span> 
+                                    of the site. Certain policy restrictions may apply.    
+                                </div>                                                    
+                            </div>
+                            <div class="popup_book_step2_submit_btn" ng-click="bookStep2FormSubmit()">Submit Payment</div>
+                            <div class="clearer"></div>
+                            
+                        </div>
+                        
+                    </div>
+                    
+                </form>
+                
+            </div>
+        </div>  
+    </div>
+    
+    <!-- POPUP Book Step2 END -->
+    
+    
+    
+    <!-- POPUP Privacy Policy START -->
+    <div class="popup_window_privacy" ng-show="showPrivacyPopup">
+        <div class="popup_window_privacy_back"></div>
+
+        <div class="popup_window_privacy_wrapper">
+            <div class="popup_heading_with_close_div">
+                <div class="popup_privacy_close_div">
+                    <div class="popup_privacy_close_btn" ng-click="showPrivacyPopup=false"></div>
+                    <div class="clearer"></div>
+                </div>
+                <div class="popup_privacy_heading_div">
+                    <img src="img/logo.png" class="logo_center_img"/>
+                </div>
+            </div>
+            <div class="popup_privacy_content_wrapper">
+                <div class="popup_content_div" id="popupPrivacyContentDiv">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- POPUP Privacy Policy END -->
+
+    
+    <!-- POPUP Rental agreement START -->
+    <div class="popup_rental_agreement" ng-show="showRentalAgreementPopup">
+        <div class="popup_rental_agreement_back"></div>
+
+        <div class="popup_rental_agreement_wrapper">
+            <div class="popup_rental_agreement_heading">
+                <div class="popup_rental_agreement_heading_text">Rental Agreement</div>
+                <div class="popup_rental_agreement_close_btn" ng-click="showRentalAgreementPopup=false"> </div>
+                <div class="clearer"></div>
+            </div>
+            
+            <div id="popupRentalAgreementContentForPrint">
+                <div class="popup_rental_agreement_content_wrapper">
+                    <div class="popup_rental_agreement_title">Rental Agreement Summary</div>
+                    <div class="popup_rental_agreement_summary_content">
+                        <div class="popup_rental_content_one_row">
+                            <div class="popup_rental_content_one_row_section margin_bottom_10">
+                                <div class="popup_rental_content_subtitle">Property Details:</div>
+                                <div class="popup_rental_content_regular_row">Listing 140</div>
+                            </div>  
+                            <div class="popup_rental_content_one_row_section margin_bottom_10">
+                                <div class="popup_rental_content_subtitle">Owner:</div>
+                            </div> 
+                            <div class="popup_rental_content_one_row_section margin_bottom_10">
+                                <div class="popup_rental_content_subtitle">Traveler:</div>
+                            </div> 
+                        </div>
+                        <div class="popup_rental_content_one_row">
+                            <div class="popup_rental_content_one_row_section margin_bottom_10">
+                                <div class="popup_rental_content_subtitle">Traveler Dates:</div>
+                                <div class="popup_rental_content_regular_row">Check-in {{book.checkInDate}}</div>
+                                <div class="popup_rental_content_regular_row">Check-out {{book.checkOutDate}}</div>
+                            </div> 
+                            <div class="popup_rental_content_one_row_section">
+                                <div class="popup_rental_content_subtitle">Payment Schedule:</div>
+                                <div class="popup_rental_content_regular_row">$3,622.99 due Feb 12, 2014</div>
+                                <div class="popup_rental_content_regular_row">$3,573.99 due May 8, 2014</div>
+                            </div> 
+                        </div>
+
+                        <div class="popup_rental_content_one_row">
+                            <div class="popup_rental_content_one_row_section">
+                                <div class="popup_rental_content_subtitle">Rental Costs:</div>
+                                <div class="popup_rental_content_regular_row">Rental Amount: $6,300.00</div>
+                                <div class="popup_rental_content_regular_row">Tax: $847.98</div>
+                                <div class="popup_rental_content_regular_row">Property Damage Protection: $49.00</div>
+                                <div class="popup_rental_content_regular_row">Total: $7,196.98</div>
+                            </div>  
+                        </div>
+                                            
+                        <div class="clearer"></div>
+                    
+                    </div>
+                    
+                    <div class="popup_rental_agreement_cancellation_policy">Cancellation Policy: 100% refund if canceled at least 30 days before arrival date.</div>
+                    
+                    <div class="popup_rental_agreement_agreement_div">
+                        <div class="popup_rental_agreement_title">Rental Agreement</div>
+                        <div class="popup_rental_agreement_agreement_content_wrapper">
+                            <div class="popup_rental_agreement_agreement_content">
+                                  Optaquist, tem etur aut dolupturero optae ex et erum rem in rem.
+                                    Itati ulparuptatem quaes dolo volo inis ent, ommolo ommolupti doluptasitat fugia
+                                    voluptate eostiatur? Quiat alianda estrum quassum quia quae ese dolliquias dolut eum que voluptatur?
+                                    Genditi umquae nos enduntium raecea sim sum lacidia porporro torrum hic tem fuga. Atinvento consequi
+                                    quo dolorem quatese quodio inctusam
+                                    lacerehent volupti que nusam quaturio ipsapit atiatur aboreptatur suntiis adi anis venihil
+                                    lianitatate aut lab is serunt.
+                                    Olorem arit utas volessime et es ea cullaborum et plibus accus, int lautemod que santi vent.
+                                    Igenis aut pro endus ma isitam aperae inihit, quo ipsum voluptaspita velentor accuptature mo qui in
+                                    pra sa vellatur ad modiate officiatur?
+                                    In nobit quae cus moluptur
+                                    Optaquist, tem etur aut dolupturero optae ex et erum rem in rem. Itati ulparuptatem quaes dolo volo
+                                    inis ent, ommolo ommolupti doluptasitat fugia
+                                    voluptate eostiatur? Quiat alianda estrum quassum quia quae ese dolliquias dolut eum que voluptatur?
+                                    Genditi umquae nos enduntium raecea sim sum lacidia porporro torrum hic tem fuga. Atinvento consequi
+                                    quo dolorem quatese quodio inctusam
+                                    lacerehent volupti que nusam quaturio ipsapit atiatur aboreptatur suntiis adi anis venihil
+                                    lianitatate aut lab is serunt.
+                                    Olorem arit utas volessime et es ea cullaborum et plibus accus, int lautemod que santi vent.
+                                    Igenis aut pro endus ma isitam aperae inihit, quo ipsum voluptaspita velentor accuptature mo qui in
+                                    pra sa vellatur ad modiate officiatur?
+                                    In nobit quae cus moluptur
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="popup_rental_bottom_div">
+                <div class="popup_rental_print_btn" print-div="#popupRentalAgreementContentForPrint">Print Rental Agreement</div>
+              <!--  <div class="popup_rental_print_btn" ng-click="printRentalAgreement()">Print Rental Agreement</div> -->
+                <div class="clearer"></div>
+            </div>
+        </div>
+    </div>
+    <!-- POPUP Rental agreement END -->
+    
+    
+    
+    
+    
+</body>
+</html>

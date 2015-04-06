@@ -1,0 +1,21 @@
+<ul class="nav nav-tabs">
+				<li><a href="#about" data-toggle="tab">About</a></li>
+				<li><a href="#contact" data-toggle="tab">Contact</a></li>
+			</ul>
+			<div class="tab-content">
+				<div  class="modal-body about tab-pane active" id="about">
+					<h3>Booking.com</h3>
+
+					<p>Booking.com travel offers a collection of the most private and must luxorius villa and
+						appartment rentals in Cape Town and South Africa.<a class="channel-more-arrow" href="#"
+						                                                    target="_blank"><img
+								src="img/icons/channel-box-ringth-arrow.png" src="link to site"></a></p>
+				</div>
+
+				<div  class="modal-body contact tab-pane active" id="contact">
+				<!--<div class="modal-body contact">-->
+					<h4>hello@amazingtravel.com</h4>
+					<h4>+1 718 345 6789</h4>
+					<h4>www.amazingtravel.com</h4>
+				</div>
+			</div>

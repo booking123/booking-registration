@@ -1,0 +1,175 @@
+<!doctype html>
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" id="ng-app" ng-app=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" id="ng-app" ng-app=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" ng-app> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="inc/bootstrap-3.1.1/css/bootstrap.css"/>
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body ng-app="angularBookingPalApp">
+<!--[if lt IE 9]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+	your browser</a> to improve your experience.</p>
+<![endif]-->
+<div class="registration">
+	<div class="header">
+		<nav role="navigation" class="navbar page-content-width">
+			<div class="navbar-header">
+				<a href="/registration/new/" class="logo"></a>
+			</div>
+			<div class="collapse navbar-collapse bs-js-navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a data-toggle="dropdown" class="dropdown-toggle" role="button" id="languages" href="#">English
+							<b class="caret"></b></a>
+						<ul aria-labelledby="languages" role="menu" class="dropdown-menu">
+							<li><a href="#">French</a></li>
+							<li><a href="#">German</a></li>
+							<li><a href="#">Ukrainian</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<ol class="breadcrumb text-center">
+		<li class="active "><a href="step1.html">1. Information</a></li>
+		<li class="active"><a href="step2.0.html">2. Partners</a></li>
+		<li class="active current"><a href="step3.html">3. Payment</a></li>
+		<li class="">4. Agreement</li>
+		<li class="">5. Confirm</li>
+	</ol>
+
+
+	<div class="wrapper-steps">
+		<div class="steps">
+			<div class="step2 step3-2 page-content-width">
+				<h1 class="step-title">Online Payment</h1>
+				<h4 class="step-title-info">We currently support only two getaway PayPal and Authorize.net. </h4>
+				<h4 class="step-title-info">We are working to interate with as many gateways as possible.</h4>
+
+				<div class="channel-percent-slider">
+					<a href="#" class="percent-arrow left"></a>
+					<a href="#" class="percent-arrow right"></a>
+					<div class="channel-percent-list-wrapper">
+						<div class="channel-percent-list">
+							<div class="select-box sb-small">
+								<div class="payment-name"><h2>GoEmerchant</h2></div>
+								<div class="separate-line"></div>
+								<div class="count-channels">goemerchant.com</div>
+								<div class="box-select-btn">
+									<button class="btn btn-success">Select</button>
+								</div>
+							</div>
+							<div class="select-box sb-small">
+								<div class="payment-name"><h2>Authorize.Net</h2></div>
+								<div class="separate-line"></div>
+								<div class="count-channels">Authorize.net</div>
+								<div class="box-select-btn">
+									<button class="btn btn-success">Select</button>
+								</div>
+							</div>
+							<div class="select-box sb-small selected">
+								<div class="payment-name"><h2>PayPal</h2></div>
+								<div class="separate-line"></div>
+								<div class="count-channels">Paypal.com</div>
+								<div class="box-select-btn">
+									<button class="btn btn-selected">Select</button>
+								</div>
+							</div>
+							<div class="select-box sb-small ">
+								<div class="payment-name"><h2>Chase Paymentech</h2></div>
+								<div class="separate-line"></div>
+								<div class="count-channels">chasepaymentech.com</div>
+								<div class="box-select-btn">
+									<button class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Selected</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer page-content-width">
+		<div class="row button-holder">
+			<div class="col-xs-6 text-left">
+				<a class="btn btn-lg btn-back" href="step3.1.html"><span class="arrow"></span> Back</a>
+			</div>
+			<div class="col-xs-6 text-right">
+				<a class="btn btn-lg btn-next" href="step4.0.html">Next <span class="arrow"></span></a>
+			</div>
+		</div>
+	</div>
+
+
+	<button type="button" data-toggle="modal" data-target="#AddPaypal">popup 1</button>
+	<button type="button" data-toggle="modal" data-target="#ImportantNotice">popup 2</button>
+
+	<div class="modal fade global-reg-modal" id="AddPaypal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">PayPal</div>
+
+				<div class="modal-body">
+					<p>Please enter email address for your business PayPal account where you would like we send your funds from confirmed booking</p>
+					<h2 class="text-center green">This Email is my company PayPal account</h2>
+					<div class="modal-form">
+						<label for="addPaypalEmail">Email</label>
+						<input type="text" id="addPaypalEmail" class="form-control input-lg" name="email" value="andre@revin.org" />
+					</div>
+					<label class="checkbox-box"><img src="img/icons/checkbox-on.png" /> My company PayPal account</label>
+				</div>
+
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-lg-6 text-left"><button type="button" class="btn btn-lg btn-back" data-dismiss="modal">Cancel</button></div>
+						<div class="col-lg-6 text-right"><button type="button" class="btn btn-lg btn-next">Submit</button></div>
+					</div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+	<div class="modal fade global-reg-modal" id="ImportantNotice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">Important Notice</div>
+
+				<div class="modal-body">
+					<p>Since you have chosen not to accept credit cards, you will receive booking confirmations via</p>
+					<div class="emails-box text-center">Email: <span>andre.revin@gmail.com <img src="img/icons/copy-mail-ico.png"></span></div>
+					<p>You will be responsible for charging the renter and BookingPal will assume that a payment has been made and invoice you for the booking.
+						If you have an API that can accept payments please contact us for a custom integration.</p>
+				</div>
+
+
+				<div class="modal-footer">
+					<div class="row"><div class="col-lg-12"><button type="button" class="btn btn-lg btn-full btn-back">Accept Credit Cards</button></div></div>
+					<div class="row"><div class="col-lg-12"><button type="button" class="btn btn-lg btn-full btn-next">Continue Without Credit Cards</button></div></div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+</div>
+
+
+<script type="text/javascript" src="inc/jquery-2.1.1.js"></script>
+<script type="text/javascript" src="inc/bootstrap-3.1.1/js/bootstrap.js"></script>
+
+</body>
+</html>
